@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://docs.ludus.cloud/schemas/range-config.json
+
+ludus:
+  - vm_name: "{{ range_id }}-demo-kali"
+  - hostname: "{{ range_id }}-attacker-box"
+  - template: kali # TODO: add actual Kali template name here
+  - vlan: 0
+  - ip_last_octet: 0 # does this work?
+  - ram_gb: 2
+  - cpus: 1
+  - linux: true
+  # I think this is all the settings we need for the Kali box
