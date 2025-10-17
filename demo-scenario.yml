@@ -20,3 +20,6 @@ ludus:
     linux: true
     roles: 
       - geerlingguy.apache
+      - file-transfer
+    role_vars:
+      file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/test.txt"
