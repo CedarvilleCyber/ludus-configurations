@@ -22,4 +22,9 @@ ludus:
       - geerlingguy.apache
       - file-transfer
     role_vars:
-      file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/test.txt"
+      file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/index.html"
+      file_transfer_dst_dir: "/var/www/html"
+      file_transfer_dst_file: "index.html"
+      file_transfer_file_owner: "www-data"
+      file_transfer_file_group: "www-data"
+

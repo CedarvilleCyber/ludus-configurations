@@ -4,12 +4,12 @@
   file:
     path: "{{ file_transfer_dst_dir }}"
     state: directory
-    mode: '1777'
+    mode: "{{ file_transfer_dst_dir_mode }}"
 
 - name: Copy file
   copy:
     src: "{{ file_transfer_src }}"
     dest: "{{ file_transfer_dst_dir ~ '/' ~ file_transfer_dst_file }}"
-    owner: root
-    group: root
-    mode: '0644'
+    owner: "{{ file_transfer_file_owner }}"
+    group: "{{ file_transfer_file_group }}"
+    mode: "{{ file_transfer_dst_file_mode }}"
