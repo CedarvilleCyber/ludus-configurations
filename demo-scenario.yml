@@ -10,8 +10,8 @@ ludus:
     cpus: 2
     linux: true
   # I think this is all the settings we need for the Kali box
-  - vm_name: "{{ range_id }}-demo-webserver"
-    hostname: "{{ range_id }}-webserver"
+  - vm_name: "{{ range_id }}-demo-web-server"
+    hostname: "{{ range_id }}-web-server"
     template: debian-12-x64-server-template
     vlan: 10
     ip_last_octet: 80
@@ -27,4 +27,17 @@ ludus:
       file_transfer_dst_file: "index.html"
       file_transfer_file_owner: "www-data"
       file_transfer_file_group: "www-data"
-
+ - vm_name: "{{ range_id }}-demo-ot-server"
+   hostname: "{{ range_id}}-demo-ot-server"
+   template: debian-12-x64-server-template
+   vlan: 10
+   ip_last_octet: 75
+   ram_gb: 4
+   cpus: 2
+   linux: true
+     # figure out where you'll pull the Python scripts from, then fill this in.
+     #        roles:
+     #- file-transfer
+     #role_vars:
+     #file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/index.html"
+     #file_transfer_dst_dir: 
