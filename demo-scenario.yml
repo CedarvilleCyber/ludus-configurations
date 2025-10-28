@@ -13,7 +13,7 @@ ludus:
   - vm_name: "{{ range_id }}-demo-web-server"
     hostname: "{{ range_id }}-web-server"
     template: debian-12-x64-server-template
-    vlan: 10
+    vlan: 11
     ip_last_octet: 80
     ram_gb: 4
     cpus: 2
@@ -30,7 +30,7 @@ ludus:
  - vm_name: "{{ range_id }}-demo-ot-server"
    hostname: "{{ range_id}}-demo-ot-server"
    template: debian-12-x64-server-template
-   vlan: 10
+   vlan: 12  
    ip_last_octet: 75
    ram_gb: 4
    cpus: 2
@@ -41,3 +41,22 @@ ludus:
      #role_vars:
      #file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/index.html"
      #file_transfer_dst_dir: 
+
+# I added this section to make sure the Kali machine can't hit the OT server directly.
+network:  
+ - inter_vlan_default: REJECT 
+ - external_default: REJECT # effectively sandboxes our environment (disallows internet)
+   rules: 
+     - name: allow attacker machine to access web server
+       vlan_src: 10
+       vlan_dst: 11
+       protocol: all
+       ports: all
+       action: ACCEPT
+     - name: allow web server to access OT server
+       vlan_src: 11
+       vlan_dst: 12
+       protocol: tcp,icmp # determine if comma separated values are allowed here
+       ports: 22 # to make the OT server at least SOMEWHAT secure
+       action: ACCEPT
+     # Determine if you need to add rules to allow traffic to get from 12 to 11 and 11 to 10.
