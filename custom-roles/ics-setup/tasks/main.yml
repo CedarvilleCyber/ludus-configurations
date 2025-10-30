@@ -22,6 +22,12 @@
     owner: "{{ ics_setup_file_owner }}"
     mode: "{{ ics_setup_file_perms }}"
 
+- name: make the scripts executable
+  shell:
+    cmd: "apt install python3"
+    cmd: "chmod +x /opt/ics/plc.py"
+    cmd: "chmod +x /opt/ics/status.py"
+
 - name: activate the services
   shell:
     cmd: "systemctl start plc"

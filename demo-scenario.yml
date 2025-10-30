@@ -34,12 +34,10 @@ ludus:
     ram_gb: 4
     cpus: 2
     linux: true
-     # figure out where you'll pull the Python scripts from, then fill this in.
-     #        roles:
-     #- file-transfer
-     #role_vars:
-     #file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/index.html"
-     #file_transfer_dst_dir: 
+    roles:
+      - ics-setup
+    role_vars:
+      # left blank to use the defaults
 
 # I added this section to make sure the Kali machine can't hit the OT server directly.
 network:  

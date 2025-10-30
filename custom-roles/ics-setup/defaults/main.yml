@@ -1,6 +1,6 @@
 ---
-# Role variables should all be prefaced with the name of the role to avoid
-# name conflicts with other roles
+# Role variables should all be prefaced with the name of the role to 
+# avoid name conflicts with other roles
 ics_setup_plc_script_src_file: "plc.py"
 
 ics_setup_status_script_src_file: "status.py"
