@@ -1,0 +1,37 @@
+- name: place script files in directory
+  copy:
+    src: "{{ ics_setup_plc_script_src_file }}"
+    dest: "{{ ics_setup_script_dst_dir }}"
+    owner: "{{ ics_setup_file_owner }}"
+    mode: "{{ ics_setup_file_perms }}"
+  copy:
+    src: "{{ ics_setup_status_script_src_file }}"
+    dest: "{{ ics_setup_script_dst_dir }}"
+    owner: "{{ ics_setup_file_owner }}"
+    mode: "{{ ics_setup_file_perms }}"
+
+- name: place service files in directory
+  copy: 
+    src: "{{ ics_setup_plc_service_src_file }}"
+    dest: "{{ ics_setup_service_dst_dir }}"
+    owner: "{{ ics_setup_file_owner }}"
+    mode: "{{ ics_setup_file_perms }}"
+  copy:
+    src: "{{ ics_setup_status_service_src_file }}"
+    dest: "{{ ics_setup_service_dst_dir }}"
+    owner: "{{ ics_setup_file_owner }}"
+    mode: "{{ ics_setup_file_perms }}"
+
+- name: make the scripts executable
+  shell:
+    cmd: "apt install python3"
+    cmd: "chmod +x /opt/ics/plc.py"
+    cmd: "chmod +x /opt/ics/status.py"
+
+- name: activate the services
+  shell:
+    cmd: "systemctl start plc"
+    cmd: "systemctl enable plc"
+    cmd: "systemctl start status"
+    cmd: "systemctl enable status"
+
