@@ -9,14 +9,54 @@ ludus:
     ram_gb: 4
     cpus: 2
     linux: true
-  # I think this is all the settings we need for the Kali box
-  - vm_name: "{{ range_id }}-demo-webserver"
-    hostname: "{{ range_id }}-webserver"
+  - vm_name: "{{ range_id }}-demo-web-server"
+    hostname: "{{ range_id }}-web-server"
     template: debian-12-x64-server-template
-    vlan: 10
+    vlan: 11
     ip_last_octet: 80
     ram_gb: 4
     cpus: 2
     linux: true
     roles: 
       - geerlingguy.apache
+      - file-transfer
+    role_vars:
+      file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/index.html"
+      file_transfer_dst_dir: "/var/www/html"
+      file_transfer_dst_file: "index.html"
+      file_transfer_file_owner: "www-data"
+      file_transfer_file_group: "www-data"
+  - vm_name: "{{ range_id }}-demo-ics-server"
+    hostname: "{{ range_id}}-ics-server"
+    template: debian-12-x64-server-template
+    vlan: 12  
+    ip_last_octet: 75
+    ram_gb: 4
+    cpus: 2
+    linux: true
+    roles:
+      - add-user
+    role_vars:
+      user: erikwilliams
+        #add a password hash here whenever you decide on what the password should be. 
+        #password: 
+
+# I added this section to make sure the Kali machine can't hit the OT server directly.
+network:  
+  inter_vlan_default: REJECT 
+    
+  # effectively sandboxes our environment (disallows internet)
+  #external_default: REJECT 
+  rules: 
+    - name: allow attacker machine to access web server
+      vlan_src: 10
+      vlan_dst: 11
+      protocol: all
+      ports: all
+      action: ACCEPT
+    - name: allow web server to access OT server
+      vlan_src: 11
+      vlan_dst: 12
+      protocol: tcp
+      ports: 22 
+      action: ACCEPT

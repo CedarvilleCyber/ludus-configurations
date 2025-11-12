@@ -1,0 +1,6 @@
+---
+- name: create user
+  ansible.builtin.user
+    name: {{ user }}
+      # Put the password HASH here (read the docs)
+    password: {{ password }}
