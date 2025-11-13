@@ -19,13 +19,13 @@ ludus:
     linux: true
     roles: 
       - geerlingguy.apache
-      - file-transfer
-    role_vars:
-      file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/index.html"
-      file_transfer_dst_dir: "/var/www/html"
-      file_transfer_dst_file: "index.html"
-      file_transfer_file_owner: "www-data"
-      file_transfer_file_group: "www-data"
+        #- file-transfer
+        #role_vars:
+      #file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/index.html"
+      #file_transfer_dst_dir: "/var/www/html"
+      #file_transfer_dst_file: "index.html"
+      #file_transfer_file_owner: "www-data"
+      #file_transfer_file_group: "www-data"
   - vm_name: "{{ range_id }}-demo-ics-server"
     hostname: "{{ range_id}}-ics-server"
     template: debian-12-x64-server-template
@@ -37,11 +37,10 @@ ludus:
     roles:
       - add-user
     role_vars:
-      user: erikwilliams
-        #add a password hash here whenever you decide on what the password should be. 
-        #password: 
+      user: "erikwilliams"
+      password: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
 
-# I added this section to make sure the Kali machine can't hit the OT server directly.
+          # I added this section to make sure the Kali machine can't hit the OT server directly.
 network:  
   inter_vlan_default: REJECT 
     

@@ -3,4 +3,4 @@
 # name conflicts with other roles
 user: sysadmin
   # Note: the ansible.builtin.user module takes in a HASH, not the password itself.
-pass: $y$j9T$3L1k.33/cEtqPUhwQYAgA.$zfwXZPmO1SWdS7EvJE6BAnJiJ4GGqvgdrLz0np9Y4MC
+password: $y$j9T$3L1k.33/cEtqPUhwQYAgA.$zfwXZPmO1SWdS7EvJE6BAnJiJ4GGqvgdrLz0np9Y4MC
