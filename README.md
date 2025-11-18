@@ -10,9 +10,10 @@ learning outcomes.
 To accomplish this, we created a variety of training scenarios that utilize 
 Ludus to quickly set up and tear down computer networks. You can learn more about
 the Ludus project at https://ludus.cloud.
+## Deploying a Range
+There should be a deploy-range.sh script that sets the Ludus range config, adds
+the Ansible roles, and deploys the range. This can all be done manually, as well.
 
-<<<<<<< HEAD
-=======
 If you want to set up the range manually, do these steps in order:
 ```
 ludus range config set -f [config-file.yml]
@@ -27,7 +28,6 @@ ludus range deploy # builds the range specified by the config.yml
 ludus range inventory > ludus-inventory.yml # do after range finishes building
 ansible-playbook rm-default-creds-playbook.yml -i ludus-inventory.yml
 ```
->>>>>>> 4a28b9f (prepared for merge into main)
 ## Ansible Roles
 ### Public Ansible Roles
 If a training scenario requires a public Ansible role, you'll get an error like 
@@ -56,3 +56,4 @@ Commands:
 
 To test your changed role, do this:
 `ludus range deploy --limit [vm-name] --only-roles [role-to-test]`
+
