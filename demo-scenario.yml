@@ -12,7 +12,7 @@ ludus:
   - vm_name: "{{ range_id }}-demo-web-server"
     hostname: "{{ range_id }}-web-server"
     template: debian-12-x64-server-template
-    vlan: 11
+    vlan: 10
     ip_last_octet: 80
     ram_gb: 4
     cpus: 2
@@ -29,33 +29,16 @@ ludus:
   - vm_name: "{{ range_id }}-demo-ics-server"
     hostname: "{{ range_id}}-ics-server"
     template: debian-12-x64-server-template
-    vlan: 12  
+    vlan: 10
     ip_last_octet: 75
     ram_gb: 4
     cpus: 2
     linux: true
     roles:
       - add-user
+      - ics-demo
     role_vars:
       user: "erikwilliams"
       password: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
 
-          # I added this section to make sure the Kali machine can't hit the OT server directly.
-network:  
-  inter_vlan_default: REJECT 
-    
-  # effectively sandboxes our environment (disallows internet)
-  #external_default: REJECT 
-  rules: 
-    - name: allow attacker machine to access web server
-      vlan_src: 10
-      vlan_dst: 11
-      protocol: all
-      ports: all
-      action: ACCEPT
-    - name: allow web server to access OT server
-      vlan_src: 11
-      vlan_dst: 12
-      protocol: tcp
-      ports: 22 
-      action: ACCEPT
+
