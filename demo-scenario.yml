@@ -12,31 +12,31 @@ ludus:
   - vm_name: "{{ range_id }}-demo-web-server"
     hostname: "{{ range_id }}-web-server"
     template: debian-12-x64-server-template
-    vlan: 10
+    vlan: 11
     ip_last_octet: 80
     ram_gb: 4
     cpus: 2
     linux: true
     roles: 
       - geerlingguy.apache
-      - file-transfer
-    role_vars:
-      file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/index.html"
-      file_transfer_dst_dir: "/var/www/html"
-      file_transfer_dst_file: "index.html"
-      file_transfer_file_owner: "www-data"
-      file_transfer_file_group: "www-data"
+        #- file-transfer
+        #role_vars:
+        #file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/index.html"
+        #file_transfer_dst_dir: "/var/www/html"
+        #file_transfer_dst_file: "index.html"
+        #file_transfer_file_owner: "www-data"
+        #file_transfer_file_group: "www-data"
   - vm_name: "{{ range_id }}-demo-ics-server"
     hostname: "{{ range_id}}-ics-server"
     template: debian-12-x64-server-template
-    vlan: 10
+    vlan: 11
     ip_last_octet: 75
     ram_gb: 4
     cpus: 2
     linux: true
     roles:
       - add-user
-      - ics-demo
+      - demo-ics
     role_vars:
       user: "erikwilliams"
       password: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
