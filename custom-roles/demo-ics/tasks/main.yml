@@ -1,0 +1,13 @@
+---
+- name: install relevant packages
+  ansible.builtin.package:
+    name:
+      - iptables
+      - iptables-persistent
+      - curl
+    state: present
+
+- name: configure ICS firewall
+  ansible.builtin.script: firewall.sh
+  become: yes # tells Ansible to do this section as root
+
