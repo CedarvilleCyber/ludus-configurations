@@ -1,0 +1,40 @@
+
+
+ludus:
+  - vm_name: "{{ range_id }}-demo-kali"
+    hostname: "{{ range_id }}-attacker-box"
+    template: kali-x64-desktop-template
+    vlan: 10
+    ip_last_octet: 100
+    ram_gb: 4
+    cpus: 2
+    linux: true
+
+
+  - vm_name: "{{ range_id }}-demo-web-server"
+    hostname: "{{ range_id }}-web-server"
+    template: debian-12-x64-server-template
+    vlan: 10 
+    ip_last_octet: 80
+    ram_gb: 4
+    cpus: 2
+    linux: true
+    roles: 
+      - geerlingguy.apache
+      - file-transfer
+    role_vars:
+      file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/index.html"
+      file_transfer_dst_dir: "/var/www/html"
+      file_transfer_dst_file: "index.html"
+      file_transfer_file_owner: "www-data"
+      file_transfer_file_group: "www-data"
+
+  - vm_name: "{{ range_id }}-demo-ics"
+    hostname: "{{ range_id }}-ics"
+    template: INFRA-CTL
+    vlan: 10 
+    ip_last_octet: 150
+    ram_gb: 4
+    cpus: 2
+    linux: true
+

@@ -1,0 +1,20 @@
+---
+# Role variables should all be prefaced with the name of the role to 
+# avoid name conflicts with other roles
+ics_setup_plc_script_src_file: "plc.py"
+
+ics_setup_status_script_src_file: "status.py"
+
+ics_setup_script_dst_dir: "/opt/ics/"
+
+ics_setup_plc_service_src_file: "plc.service"
+
+ics_setup_status_service_src_file: "status.service"
+
+ics_setup_service_dst_dir: "/etc/systemd/system/plc.service"
+
+ics_setup_dst_dir_perms: "0755"
+
+ics_setup_file_perms: "0744"
+
+ics_setup_file_owner: "root"

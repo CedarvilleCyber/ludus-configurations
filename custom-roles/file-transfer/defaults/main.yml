@@ -1,0 +1,18 @@
+---
+# Role variables should all be prefaced with the name of the role to avoid
+# name conflicts with other roles
+
+file_transfer_src: "temp.txt"
+
+file_transfer_dst_dir: "/tmp"
+
+file_transfer_dst_file: "temp.txt"
+
+file_transfer_dst_dir_mode: "0655"
+
+file_transfer_dst_file_mode: "0644"
+
+file_transfer_file_owner: "root"
+
+file_transfer_file_group: "root"
+

@@ -1,0 +1,15 @@
+---
+
+- name: Ensure dst dir exists
+  file:
+    path: "{{ file_transfer_dst_dir }}"
+    state: directory
+    mode: "{{ file_transfer_dst_dir_mode }}"
+
+- name: Copy file
+  copy:
+    src: "{{ file_transfer_src }}"
+    dest: "{{ file_transfer_dst_dir ~ '/' ~ file_transfer_dst_file }}"
+    owner: "{{ file_transfer_file_owner }}"
+    group: "{{ file_transfer_file_group }}"
+    mode: "{{ file_transfer_dst_file_mode }}"
