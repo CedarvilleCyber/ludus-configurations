@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg viewBox="0 0 200 200" version="1.1" id="svg21" sodipodi:docname="logo.svg" inkscape:version="1.4 (86a8ad7, 2024-10-11)" inkscape:export-filename="logo1024.png" inkscape:export-xdpi="491.51999" inkscape:export-ydpi="491.51999" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview id="namedview21" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:zoom="4" inkscape:cx="129.125" inkscape:cy="104.875" inkscape:window-width="3440" inkscape:window-height="1369" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="g3"/>
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#003a63" stroke="#fdb813" stroke-width="3" id="circle1"/>
+  <!-- Ancient city walls (outer) -->
+  <!-- Inner city buildings -->
+  <!-- Central tower/citadel -->
+  <!-- Digital/cyber elements -->
+  <!-- Circuit traces -->
+  <!-- Circuit nodes -->
+  <!-- Horn/trumpet symbol (reference to Joshua's trumpets) -->
+  <!-- Sound waves from horn -->
+  <!-- Project title text -->
+  <!-- Subtle grid pattern overlay -->
+  <defs id="defs21">
+    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#fdb813" stroke-width="0.5" opacity="0.2" id="path21"/>
+    </pattern>
+  </defs>
+  <g id="g3" transform="translate(1.538136,3.062501)">
+    <rect x="50" y="100" width="12" height="20" fill="#fdb813" id="rect1" style="opacity:0.705"/>
+    <rect x="68" y="95" width="10" height="25" fill="#fdb813" id="rect2" style="opacity:0.732"/>
+    <rect x="120" y="97" width="13" height="23" fill="#fdb813" id="rect5" style="opacity:0.658"/>
+    <rect x="138" y="99" width="10" height="21" fill="#fdb813" id="rect6" style="opacity:0.805"/>
+    <path id="polygon7" style="opacity:0.7;fill:#fdb813" d="m 100,60 15,15 H 85 Z m 9.22873,27.781067 v 4.970414 h -4.26036 v 14.201189 h 7.81065 V 87.781067 Z M 90.76719,106.95267 h 9.94083 V 92.751481 l -9.941152,-8.4e-5 z m 0,-31.952668 h 18.46154 v 17.751479 l -18.461219,8.5e-5 z" sodipodi:nodetypes="ccccccccccccccccccccc" transform="matrix(1.4083333,0,0,1.4083333,-43.830456,-30.625)"/>
+    <path d="m 30,120 v -10 h 10 v 5 h 10 v -5 h 10 v 10 h 10 v -10 h 10 v 5 h 10 v -5 h 10 v 10 h 10 v -10 h 10 v 5 h 10 v -5 h 10 v 10 h 10 v -10 h 10 v 5 h 10 v 5 20 H 30 Z" fill="#fdb813" opacity="0.8" id="path1" style="opacity:1"/>
+    <g id="g2" transform="translate(28.461047,96.696852)">
+      <path d="M 40,60 H 60 V 50 h 20" stroke="#fdb813" stroke-width="2" fill="none" opacity="0.7" id="path7"/>
+      <circle cx="40" cy="60" r="3" fill="#fdb813" id="circle10"/>
+      <circle cx="80" cy="50" r="3" fill="#fdb813" id="circle11"/>
+    </g>
+    <g id="g1" transform="translate(-20.85965,-3.3587571)">
+      <path d="m 120,50 h 20 v 10 h 20" stroke="#fdb813" stroke-width="2" fill="none" opacity="0.7" id="path8"/>
+      <circle cx="120" cy="50" r="3" fill="#fdb813" id="circle12"/>
+      <circle cx="160" cy="60" r="3" fill="#fdb813" id="circle13"/>
+    </g>
+  </g>
+</svg>

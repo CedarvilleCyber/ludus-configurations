@@ -1,0 +1,5 @@
+---
+- name: mount bind folders
+  become: true
+  ansible.builtin.shell: |
+    mount --bind {{ bind_origin }} {{ bind_dst }}
