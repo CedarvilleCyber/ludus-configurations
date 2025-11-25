@@ -1,0 +1,40 @@
+:root {
+    --cu-gold: #F5A800;
+    --cu-blue: #003865;
+}
+
+body {
+    background-color: #1e1e1e;
+    color: #ababab;
+}
+
+.logo {
+    width: 2em;
+    height: 2em;
+}
+
+.page-title {
+    color: var(--cu-gold);
+    text-decoration: none;
+}
+
+.nav-link {
+    color: var(--cu-gold);
+}
+
+.nav-link:hover {
+    color: white;  
+    /* This color is a placeholder. Meet w/ team to decide a better color to use here.
+       Also, when you click on a link, it turns the default blue color. Figure out how to 
+       override that behavior. */
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    color: white;
+    background-color: var(--cu-blue);
+}
+
+/* note to self: figure out how to override Bootstrap styling to make the buttons gold.
+ * Default Bootstrap color: #0d6efd;
+ */

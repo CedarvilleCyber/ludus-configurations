@@ -1,0 +1,5 @@
+---
+- name: clean folder
+  become: true
+  ansible.builtin.shell: |
+    rm {{ clean_folder_path }}
