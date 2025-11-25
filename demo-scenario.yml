@@ -8,7 +8,16 @@ ludus:
     ip_last_octet: 100
     ram_gb: 4
     cpus: 2
-    linux: true
+    linux: 
+      packages: 
+        - nmap
+        - seclists
+        - hydra
+        - curl
+        - burpsuite
+        - tmux
+        - man
+
   - vm_name: "{{ range_id }}-demo-web-server"
     hostname: "{{ range_id }}-web-server"
     template: debian-12-x64-server-template
@@ -20,7 +29,10 @@ ludus:
       packages:
         - apache2
         - php
-        - libapache2-mod-php
+        - libapache2-mod-php 
+        - curl
+        - php
+        - man
     roles: 
       - file-transfer
       - clean-folder
@@ -38,10 +50,15 @@ ludus:
     ip_last_octet: 75
     ram_gb: 4
     cpus: 2
-    linux: true
+    linux: 
+      packages: 
+        - curl
+        - iptables
+        - iptables-persistent
+        - man
     roles:
       - add-user
-      - demo-ics
+      - demo-ics-firewall
     role_vars:
       user: "erikwilliams"
       password: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
