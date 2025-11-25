@@ -63,3 +63,21 @@ ludus:
       user: "erikwilliams"
       password: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
 
+# reject all inter-vlan traffic, then explicitly allow traffic to and from the web server.
+network: 
+  inter_vlan_default: REJECT
+  rules: 
+    - name: inbound-web. Allow all machines to send web traffic to the web server
+      vlan_src: all
+      vlan_dst: 11
+      ip_last_octet_dst: 80
+      protocol: tcp
+      ports: 80
+      action: ACCEPT
+    - name: outbound-web. Allow the web server to respond to web traffic from all machines
+      vlan_src: 11
+      ip_last_octet_src: 80
+      vlan_dst: all
+      protocol: tcp
+      ports: 80
+      action: ACCEPT
