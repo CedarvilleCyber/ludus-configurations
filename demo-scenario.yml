@@ -31,7 +31,6 @@ ludus:
         - php
         - libapache2-mod-php 
         - curl
-        - php
         - man
     roles: 
       - file-transfer
