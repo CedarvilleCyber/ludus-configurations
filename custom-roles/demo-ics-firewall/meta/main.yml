@@ -2,7 +2,7 @@
 dependencies: []
 
 galaxy_info:
-  role_name: ludus_ics_demo
+  role_name: ludus_demo_ics_firewall
   author: David-B-Moore
   description: An Ansible Role that configures the demo ICS machine to block traffic from all machines except the web server. 
   company: Cedarville University

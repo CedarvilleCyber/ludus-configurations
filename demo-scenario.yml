@@ -8,7 +8,16 @@ ludus:
     ip_last_octet: 100
     ram_gb: 4
     cpus: 2
-    linux: true
+    linux: 
+      packages: 
+        - nmap
+        - seclists
+        - hydra
+        - curl
+        - burpsuite
+        - tmux
+        - man
+
   - vm_name: "{{ range_id }}-demo-web-server"
     hostname: "{{ range_id }}-web-server"
     template: debian-12-x64-server-template
@@ -16,7 +25,11 @@ ludus:
     ip_last_octet: 80
     ram_gb: 4
     cpus: 2
-    linux: true
+    linux: 
+      packages: 
+        - curl
+        - php
+        - man
     roles: 
       - geerlingguy.apache
       - file-transfer
@@ -26,19 +39,43 @@ ludus:
       file_transfer_dst_file: "index.html"
       file_transfer_file_owner: "www-data"
       file_transfer_file_group: "www-data"
-  - vm_name: "{{ range_id }}-demo-ics-server"
-    hostname: "{{ range_id}}-ics-server"
-    template: debian-12-x64-server-template
+
+  - vm_name: "{{ range_id }}-demo-ics"
+    hostname: "{{ range_id }}-ics"
+    template: INFRA-CTL
     vlan: 11
     ip_last_octet: 75
     ram_gb: 4
     cpus: 2
-    linux: true
+    linux: 
+      packages: 
+        - curl
+        - iptables
+        - iptables-persistent
+        - man
     roles:
       - add-user
-      - demo-ics
+      - demo-ics-firewall
     role_vars:
       user: "erikwilliams"
       password: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
 
+# reject all inter-vlan traffic, then explicitly allow traffic to and from the web server.
+network: 
+  inter_vlan_default: REJECT
+  rules: 
+    - name: inbound-web. Allow all machines to send web traffic to the web server
+      vlan_src: all
+      vlan_dst: 11
+      ip_last_octet_dst: 80
+      protocol: tcp
+      ports: 80
+      action: ACCEPT
+    - name: outbound-web. Allow the web server to respond to web traffic from all machines
+      vlan_src: 11
+      ip_last_octet_src: 80
+      vlan_dst: all
+      protocol: tcp
+      ports: 80
+      action: ACCEPT
 
