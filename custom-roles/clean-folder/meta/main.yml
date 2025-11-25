@@ -2,9 +2,9 @@
 dependencies: []
 
 galaxy_info:
-  role_name: php-bind
+  role_name: clean-folder
   author: Major-Q
-  description: run a basic mount bind command to connect two folders on the vm
+  description: run a basic rm command on the system to clean a folder
   company: Cedarville University
   license: GPLv3
   min_ansible_version: "2.10"

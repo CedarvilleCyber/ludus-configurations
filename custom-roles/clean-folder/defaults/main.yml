@@ -2,6 +2,4 @@
 # Role variables should all be prefaced with the name of the role to avoid
 # name conflicts with other roles
 
-bind_origin: "/tmp"
-
-bind_dst: "/"
+clean_folder_path: "/tmp"

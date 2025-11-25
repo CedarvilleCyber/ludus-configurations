@@ -23,15 +23,14 @@ ludus:
         - libapache2-mod-php
     roles: 
       - file-transfer
-      - php-bind
+      - clean-folder
     role_vars:
-      file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/3-water-scenario"
-      file_transfer_dst_dir: "/tmp"
+      file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/3-water-scenario/"
+      file_transfer_dst_dir: "/var/www/html"
       file_transfer_dst_file: "/"
       file_transfer_file_owner: "www-data"
       file_transfer_file_group: "www-data"
-      bind_origin: "/tmp/3-water-scenario"
-      bind_dst: "/var/www/html"
+      clean_folder_path: "/var/www/html/index.html"
   - vm_name: "{{ range_id }}-demo-ics-server"
     hostname: "{{ range_id}}-ics-server"
     template: INFRA-CTL
