@@ -32,19 +32,25 @@ ludus:
         - libapache2-mod-php 
         - curl
         - man
+        - python3
+        - python3-pip
     roles: 
-      - file-transfer
       - clean-folder
+      - file-transfer
+      - add-user
     role_vars:
-      file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/3-water-scenario/"
+      file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/demo-website/"
       file_transfer_dst_dir: "/var/www/html"
       file_transfer_dst_file: "/"
       file_transfer_file_owner: "www-data"
       file_transfer_file_group: "www-data"
       clean_folder_path: "/var/www/html/index.html"
+      user: "erikwilliams"
+      password: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
+
   - vm_name: "{{ range_id }}-demo-ics-server"
     hostname: "{{ range_id}}-ics-server"
-    template: INFRA-CTL
+    template: INFRA-CTL-v3
     vlan: 11
     ip_last_octet: 75
     ram_gb: 4
@@ -62,21 +68,37 @@ ludus:
       user: "erikwilliams"
       password: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
 
-# reject all inter-vlan traffic, then explicitly allow traffic to and from the web server.
+# rejects all inter-vlan traffic
 network: 
   inter_vlan_default: REJECT
   rules: 
-    - name: inbound-web. Allow all machines to send web traffic to the web server
+      # explicitly allows traffic to and from the web server on port 80
+    - name: inbound-web-80. Allow all machines to send web traffic to the web server on port 80
       vlan_src: all
       vlan_dst: 11
       ip_last_octet_dst: 80
       protocol: tcp
       ports: 80
       action: ACCEPT
-    - name: outbound-web. Allow the web server to respond to web traffic from all machines
+    - name: outbound-web-80. Allow the web server to respond to web traffic on port 80
       vlan_src: 11
       ip_last_octet_src: 80
       vlan_dst: all
       protocol: tcp
       ports: 80
+      action: ACCEPT
+      # explicitly allows traffic to and from the web server on port 8080
+    - name: inbound-web-8080. Allow all machines to send web traffic to the web server on port 8080
+      vlan_src: all
+      vlan_dst: 11
+      ip_last_octet_dst: 80
+      protocol: tcp
+      ports: 8080
+      action: ACCEPT
+    - name: outbound-web-8080. Allow the web server to respond to web traffic on port 8080
+      vlan_src: 11
+      ip_last_octet_src: 80
+      vlan_dst: all
+      protocol: tcp
+      ports: 8080
       action: ACCEPT

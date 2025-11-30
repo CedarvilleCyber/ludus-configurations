@@ -6,7 +6,7 @@ session_start();
 <html lang="en">
 
 <head>
-  <title>Jericho Water Treatment Center</title>
+  <title>Jericho Department of Transportation</title>
 
   <?php include 'include.php'; ?>
   <link rel="stylesheet" href="./css/index.css">

@@ -3,3 +3,10 @@
   become: true
   ansible.builtin.shell: |
     rm {{ clean_folder_path }}
+- name: configure the web server directory so the upload feature works (demo scenario)
+  become: true
+  ansible.builtin.file: 
+    path: /var/www/html/uploads
+    state: directory
+    owner: www-data
+    mode: 755
