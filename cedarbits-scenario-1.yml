@@ -1,0 +1,79 @@
+# yaml-language-server: $schema=https://docs.ludus.cloud/schemas/range-config.json
+
+ludus: 
+  # TODO: Figure out how to allow SSH to the traffic server, 
+  # but limit to one SSH connection at a time
+  #
+  # TODO: set up the web server & web app from Nick
+  - vm_name: "{{ range_id }}-traffic-server"
+    hostname: "traffic-server"
+    template: debian-12-x64-server-template
+    vlan: 99
+    ip_last_octet: 33
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - curl
+        - man
+
+  # TODO: make 20 total student VMs. Check the Ludus Discord server for Erik's reply.
+  - vm_name: "{{ range_id }}-student-vm-1"
+    hostname: "student-1"
+    template: kali-x64-desktop-template
+    vlan: 1
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+        - man
+
+  - vm_name: "{{ range_id }}-student-vm-2"
+    hostname: "student-2"
+    template: kali-x64-desktop-template
+    vlan: 2
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+        - man
+
+  - vm_name: "{{ range_id }}-student-vm-3"
+    hostname: "student-3"
+    template: kali-x64-desktop-template
+    vlan: 3
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+        - man
+
+network:
+  inter_vlan_default: REJECT
+  external_default: REJECT    # warning: this may break the range setup process
+  rules: 
+    - name: Inbound - allow students to send traffic to target server
+      vlan_src: all
+      vlan_dst: 99
+      protocol: all
+      ports: all
+      action: ACCEPT
+    - name: Outbound - allow return traffic from target to students
+      vlan_src: 99
+      vlan_dst: all
+      protocol: all
+      ports: all
+      action: ACCEPT
+
