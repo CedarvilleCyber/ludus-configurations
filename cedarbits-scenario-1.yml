@@ -18,10 +18,11 @@ ludus:
         - man
 
   # TODO: make 20 total student VMs. Check the Ludus Discord server for Erik's reply.
+  # Note: vlan numbers must be between 2 and 255 (inclusive), so don't use vlan 1
   - vm_name: "{{ range_id }}-student-vm-1"
     hostname: "student-1"
     template: kali-x64-desktop-template
-    vlan: 1
+    vlan: 100
     ip_last_octet: 1
     ram_gb: 4
     cpus: 2
