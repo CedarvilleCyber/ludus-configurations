@@ -17,7 +17,6 @@ ludus:
         - curl
         - man
 
-  # TODO: make 20 total student VMs. Check the Ludus Discord server for Erik's reply.
   # Note: vlan numbers must be between 2 and 255 (inclusive), so don't use vlan 1
   - vm_name: "{{ range_id }}-student-vm-1"
     hostname: "student-1"
@@ -60,6 +59,228 @@ ludus:
         - curl
         - tmux
         - man
+
+  - vm_name: "{{ range_id }}-student-vm-4"
+    hostname: "student-4"
+    template: kali-x64-desktop-template
+    vlan: 4
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-5"
+    hostname: "student-5"
+    template: kali-x64-desktop-template
+    vlan: 5
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-6"
+    hostname: "student-6"
+    template: kali-x64-desktop-template
+    vlan: 6
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-7"
+    hostname: "student-7"
+    template: kali-x64-desktop-template
+    vlan: 7
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-8"
+    hostname: "student-8"
+    template: kali-x64-desktop-template
+    vlan: 8
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-9"
+    hostname: "student-9"
+    template: kali-x64-desktop-template
+    vlan: 9
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-10"
+    hostname: "student-10"
+    template: kali-x64-desktop-template
+    vlan: 10
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-11"
+    hostname: "student-11"
+    template: kali-x64-desktop-template
+    vlan: 11
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-12"
+    hostname: "student-12"
+    template: kali-x64-desktop-template
+    vlan: 12
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-13"
+    hostname: "student-13"
+    template: kali-x64-desktop-template
+    vlan: 13
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-14"
+    hostname: "student-14"
+    template: kali-x64-desktop-template
+    vlan: 14
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-15"
+    hostname: "student-15"
+    template: kali-x64-desktop-template
+    vlan: 15
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-16"
+    hostname: "student-16"
+    template: kali-x64-desktop-template
+    vlan: 16
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-17"
+    hostname: "student-17"
+    template: kali-x64-desktop-template
+    vlan: 17
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-18"
+    hostname: "student-18"
+    template: kali-x64-desktop-template
+    vlan: 18
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-19"
+    hostname: "student-4"
+    template: kali-x64-desktop-template
+    vlan: 19
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
+  - vm_name: "{{ range_id }}-student-vm-20"
+    hostname: "student-20"
+    template: kali-x64-desktop-template
+    vlan: 20
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+
 
 network:
   inter_vlan_default: REJECT
