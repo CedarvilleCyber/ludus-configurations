@@ -46,33 +46,33 @@ ludus:
         - tmux
         - man
 
-  - vm_name: "{{ range_id }}-student-vm-3"
-    hostname: "student-3"
-    template: kali-x64-desktop-template
-    vlan: 3
-    ip_last_octet: 1
-    ram_gb: 4
-    cpus: 2
-    linux: 
-      packages: 
-        - nmap
-        - curl
-        - tmux
-        - man
-
-  - vm_name: "{{ range_id }}-student-vm-4"
-    hostname: "student-4"
-    template: kali-x64-desktop-template
-    vlan: 4
-    ip_last_octet: 1
-    ram_gb: 4
-    cpus: 2
-    linux: 
-      packages: 
-        - nmap
-        - curl
-        - tmux
-
+#  - vm_name: "{{ range_id }}-student-vm-3"
+#    hostname: "student-3"
+#    template: kali-x64-desktop-template
+#    vlan: 3
+#    ip_last_octet: 1
+#    ram_gb: 4
+#    cpus: 2
+#    linux: 
+#      packages: 
+#        - nmap
+#        - curl
+#        - tmux
+#        - man
+#
+#  - vm_name: "{{ range_id }}-student-vm-4"
+#    hostname: "student-4"
+#    template: kali-x64-desktop-template
+#    vlan: 4
+#    ip_last_octet: 1
+#    ram_gb: 4
+#    cpus: 2
+#    linux: 
+#      packages: 
+#        - nmap
+#        - curl
+#        - tmux
+#
 #  - vm_name: "{{ range_id }}-student-vm-5"
 #    hostname: "student-5"
 #    template: kali-x64-desktop-template
@@ -284,7 +284,8 @@ ludus:
 
 network:
   inter_vlan_default: REJECT
-  external_default: REJECT    # this breaks the deployment process for some reason
+  external_default: REJECT   # Note: change this to ACCEPT, then deploy range,
+                             # then change back and redeploy w/ -t networks flag
   rules: 
     - name: Inbound - allow students to send traffic to target server
       vlan_src: all
