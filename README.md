@@ -42,7 +42,29 @@ add it like so:
 `ludus ansible role add -d ./custom-roles/add-user`
 (This example adds the "add-user" role which is located in the top-level
 custom-roles directory in the repo.) 
-### Troubleshooting
+## Ludus Networking
+### External Default Usage
+In the Networking section of a Ludus range config, there's a setting called 
+`external_default`. If you set `external_default` to `REJECT`, your range will
+not be able to access the internet, which is a useful feature for sandboxing. 
+However, if you deploy a range with this setting enabled, your range deployment 
+will fail.
+
+To properly use this feature, you must first deploy the range with 
+external\_default set to "ACCEPT." This allows the VMs in the range to download 
+all the packages they need. Once range deployment is done, change 
+external\_default to "REJECT" or "DROP," set the config with the ludus command,
+and re-deploy the networking section of the range config like so: 
+```
+ludus range config set -f my-config.yml
+ludus range deploy -t network
+```
+- This will leave the VMs intact and fully configured
+- Only the range's networking will be impacted (i.e. redone)
+
+To learn more about deploy tags, see the official docs here: 
+https://docs.ludus.cloud/docs/tags
+## Troubleshooting
 If you encounter trouble deploying a range, use these commands to troubleshoot:
 `ludus range logs --verbose`
 `ludus range errors --verbose`
