@@ -14,8 +14,13 @@ ludus:
     cpus: 2
     linux: 
       packages: 
+        - apache2
         - curl
         - man
+    roles: 
+      - web-setup
+    role_vars:
+      web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/CedarbitsSite1.zip"
 
   # Note: vlan numbers must be between 2 and 255 (inclusive), so don't use vlan 1
   - vm_name: "{{ range_id }}-student-vm-1"
@@ -284,7 +289,7 @@ ludus:
 
 network:
   inter_vlan_default: REJECT
-  external_default: REJECT   # Note: change this to ACCEPT, then deploy range,
+  external_default: ACCEPT   # Note: change this to ACCEPT, then deploy range,
                              # then change back and redeploy w/ -t networks flag
   rules: 
     - name: Inbound - allow students to send traffic to target server

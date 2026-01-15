@@ -1,0 +1,34 @@
+---
+
+# NOTE: make sure apache2 or httpd is in the machine's 
+# package install list in the Ludus range config file. 
+
+- name: Start Apache for the Debian OS family
+  ansible.builtin.service: 
+    name: "apache2"
+    state: started
+    enabled: true
+    when: ansible_os_family == "Debian"
+
+- name: Start Apache (httpd) for a non-Debian OS
+  ansible.builtin.service: 
+    name: "httpd"
+    state: started
+    enabled: true
+    when: ansible_os_family == "RedHat"
+
+- name: create /var/www/html if it doesn't exist
+  ansible.builtin.file: 
+    path: /var/www/html
+    mode: '0755'
+
+- name: download web app from GitHub
+  ansible.builtin.get_url:
+    url: "{{ web_setup_url }}"
+    dest: /tmp/webapp.zip
+    owner: www-data
+
+- name: unzip the web app
+  ansible.builtin.unarchive: 
+    src: /tmp/webapp.zip
+    dest: /var/www/html
