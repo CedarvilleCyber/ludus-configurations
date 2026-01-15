@@ -3,4 +3,6 @@
   ansible.builtin.user:
     name: "{{ user }}"
     password: "{{ password }}" # this takes in a hash for /etc/shadow
+    generate_ssh_key: true
+    ssh_key_passphrase: "dragon"
     shell: /bin/bash
