@@ -1,0 +1,46 @@
+---
+
+- name: Install Apache for the Debian OS family
+  ansible.builtin.package: 
+    name: apache2
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install Apache (httpd) for a non-Debian OS
+  ansible.builtin.package: 
+    name: httpd
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Start Apache for the Debian OS family
+  ansible.builtin.service: 
+    name: apache2
+    state: started
+    enabled: true
+  when: ansible_os_family == "Debian"
+
+- name: Start Apache (httpd) for a non-Debian OS
+  ansible.builtin.service: 
+    name: httpd
+    state: started
+    enabled: true
+  when: ansible_os_family == "RedHat"
+
+- name: create /var/www/html if it doesn't exist
+  ansible.builtin.file: 
+    path: /var/www/html
+    mode: '0755'
+
+- name: ensure CA certificates and unzip are installed
+  ansible.builtin.package: 
+    name: 
+      - ca-certificates
+      - unzip
+    state: present
+  become: true
+
+- name: unzip the web app
+  ansible.builtin.unarchive: 
+    src: "{{ apache_web_setup_url }}"
+    dest: /var/www/html
+    remote_src: yes

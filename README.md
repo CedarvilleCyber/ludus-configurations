@@ -41,7 +41,20 @@ To add a private Ansible role, find the role's directory in the Git repo. Then,
 add it like so:
 `ludus ansible role add -d ./custom-roles/add-user`
 (This example adds the "add-user" role which is located in the top-level
-custom-roles directory in the repo.) 
+custom-roles directory in the repo.)
+### Testing Ansible Roles
+If you need to modify a role, make sure to remove the role and add it back before
+redeploying your range. If you don't do this, your changes will not take effect.
+
+Commands:
+`ludus ansible role rm [role-name]`
+`ludus ansible role add -d ./path/to/role`
+
+To test your changed role, do this:
+`ludus range deploy --limit [vm-name] --only-roles [role-to-test]`
+
+To test the syntax of an Ansible role, you can make a mini Ansible playbook that
+runs the role, then use the built-in Ansible syntax linter. 
 ## Ludus Networking
 ### External Default Usage
 In the Networking section of a Ludus range config, there's a setting called 
@@ -73,13 +86,4 @@ At the time of writing, Ludus has a bug where newlines are printed as the litera
 "\n" characters instead of printing as a newline. To work around that, do this: 
 `ludus range errors --verbose 2>&1 | sed 's/\\n/\n/g' | less`
 
-If you need to modify a role, make sure to remove the role and add it back before
-redeploying your range. If you don't do this, your changes will not take effect.
-
-Commands:
-`ludus ansible role rm [role-name]`
-`ludus ansible role add -d ./path/to/role`
-
-To test your changed role, do this:
-`ludus range deploy --limit [vm-name] --only-roles [role-to-test]`
 

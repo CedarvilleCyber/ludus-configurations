@@ -1,34 +1,52 @@
 ---
 
-# NOTE: make sure apache2 or httpd is in the machine's 
-# package install list in the Ludus range config file. 
+- name: ensure unzip and CA certificates are installed
+  ansible.builtin.package:
+    name: 
+      - ca-certificates
+      - unzip
+    state: present
+  become: true
 
-- name: Start Apache for the Debian OS family
-  ansible.builtin.service: 
-    name: "apache2"
-    state: started
-    enabled: true
-    when: ansible_os_family == "Debian"
+- name: validate web_setup_type
+  assert: 
+    that: 
+      - web_setup_type is defined
+      - web_setup_type in ['apache', 'nodejs']
+    fail_msg: "web_setup_type must be either 'apache' or 'nodejs', got '{{ web_setup_type }}'"
+    success_msg: "web_setup_type is set to '{{ web_setup_type }}'"
 
-- name: Start Apache (httpd) for a non-Debian OS
-  ansible.builtin.service: 
-    name: "httpd"
-    state: started
-    enabled: true
-    when: ansible_os_family == "RedHat"
+- name: Set up the web app using Apache
+  when: web_setup_type == 'apache'
+  block: 
+    - name: install Apache
+      ansible.builtin.include_role: 
+        name: geerlingguy.apache
+  
+    - name: unzip the web app into /var/www/html
+      ansible.builtin.unarchive: 
+        src: "{{ web_setup_url }}"
+        dest: /var/www/html
+        remote_src: yes
 
-- name: create /var/www/html if it doesn't exist
-  ansible.builtin.file: 
-    path: /var/www/html
-    mode: '0755'
+- name: set up the web app using Node JS
+  when: web_setup_type == 'nodejs'
+  block:
+    - name: install Node JS
+      ansible.builtin.include_role:
+        name: geerlingguy.nodejs
 
-- name: download web app from GitHub
-  ansible.builtin.get_url:
-    url: "{{ web_setup_url }}"
-    dest: /tmp/webapp.zip
-    owner: www-data
+    - name: create nodejs user
+      ansible.builtin.user: 
+        name: nodejs
+        system: yes
+        shell: /bin/false
+        home: /opt/nodejs
 
-- name: unzip the web app
-  ansible.builtin.unarchive: 
-    src: /tmp/webapp.zip
-    dest: /var/www/html
+    - name: unzip the web app into the user's home directory
+      ansible.builtin.unarchive:
+        src: "{{ web_setup_url }}"
+        dest: /opt/nodejs
+        remote_src: yes
+
+    # add a command to start the thing here. Something like "node server.js" ?

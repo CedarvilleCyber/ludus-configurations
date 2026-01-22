@@ -1,0 +1,4 @@
+---
+# Role variables should all be prefaced with the name of the role to avoid
+# name conflicts with other roles
+apache_web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/example-website.zip"
