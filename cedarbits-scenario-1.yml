@@ -3,8 +3,6 @@
 ludus: 
   # TODO: Figure out how to allow SSH to the traffic server, 
   # but limit to one SSH connection at a time
-  #
-  # TODO: set up the web server & web app from Nick
   - vm_name: "{{ range_id }}-traffic-server"
     hostname: "traffic-server"
     template: debian-12-x64-server-template

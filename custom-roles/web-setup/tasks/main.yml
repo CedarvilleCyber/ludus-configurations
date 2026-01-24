@@ -1,6 +1,6 @@
 ---
 
-- name: ensure unzip and CA certificates are installed
+- name: install packages (ca-certificates and unzip)
   ansible.builtin.package:
     name: 
       - ca-certificates
@@ -49,4 +49,38 @@
         dest: /opt/nodejs
         remote_src: yes
 
-    # add a command to start the thing here. Something like "node server.js" ?
+    - name: set permissions on web app files
+      ansible.builtin.file:
+        path: /opt/nodejs
+        state: directory
+        recurse: yes
+        owner: nodejs
+        group: nodejs
+
+    - name: find server.js so we can run the server
+      ansible.builtin.find:
+        path: /opt/nodejs
+        pattern: "server.js"
+        recurse: true
+        #limit: 1   # added in Ansible 2.18, and Ludus is on 2.16, so it's not supported yet
+      register: server_file  # essentially a variable that has the file's path
+
+    - name: fail if server.js is not found
+      ansible.builtin.fail: 
+        msg: "ERROR: server.js not found. If the Node JS web app runs under a different name, rename it to 'server.js' and try again."
+      when: server_file.matched == 0
+
+    - name: create the nodejs systemd service file
+      ansible.builtin.template: 
+        src: templates/service.j2
+        dest: /etc/systemd/system/nodejs.service
+      
+    - name: reload systemd daemon
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: start NodeJS service
+      ansible.builtin.service: 
+        name: nodejs
+        state: started
+        enabled: yes
