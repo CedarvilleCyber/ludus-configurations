@@ -1,0 +1,8 @@
+---
+# Role variables should all be prefaced with the name of the role to avoid
+# name conflicts with other roles
+
+# Valid values: 'apache' or 'nodejs'
+web_setup_type: apache
+
+web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/example-website.zip"

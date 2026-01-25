@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=https://docs.ludus.cloud/schemas/range-config.json
+
+ludus: 
+  # TODO: Figure out how to allow SSH to the traffic server, 
+  # but limit to one SSH connection at a time
+  - vm_name: "{{ range_id }}-traffic-server"
+    hostname: "traffic-server"
+    template: debian-12-x64-server-template
+    vlan: 99
+    ip_last_octet: 33
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - curl
+        - man
+    roles: 
+      - web-setup
+    role_vars:
+      web_setup_type: nodejs 
+      web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/CedarbitsSite1.zip"
+
+  # Note: vlan numbers must be between 2 and 255 (inclusive), so don't use vlan 1
+  - vm_name: "{{ range_id }}-student-vm-1"
+    hostname: "student-1"
+    template: kali-x64-desktop-template
+    vlan: 100
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - nmap
+        - curl
+        - tmux
+        - man
+
+network:
+  inter_vlan_default: REJECT
+  external_default: ACCEPT   # Note: change this to ACCEPT, then deploy range,
+                             # then change to REJECT and redeploy w/ -t networks flag
+  rules: 
+    - name: Inbound - allow students to send traffic to target server
+      vlan_src: all
+      vlan_dst: 99
+      protocol: all
+      ports: all
+      action: ACCEPT
+    - name: Outbound - allow return traffic from target to students
+      vlan_src: 99
+      vlan_dst: all
+      protocol: all
+      ports: all
+      action: ACCEPT
+

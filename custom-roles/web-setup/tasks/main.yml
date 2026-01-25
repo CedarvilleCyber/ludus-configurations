@@ -1,0 +1,86 @@
+---
+
+- name: install packages (ca-certificates and unzip)
+  ansible.builtin.package:
+    name: 
+      - ca-certificates
+      - unzip
+    state: present
+  become: true
+
+- name: validate web_setup_type
+  assert: 
+    that: 
+      - web_setup_type is defined
+      - web_setup_type in ['apache', 'nodejs']
+    fail_msg: "web_setup_type must be either 'apache' or 'nodejs', got '{{ web_setup_type }}'"
+    success_msg: "web_setup_type is set to '{{ web_setup_type }}'"
+
+- name: Set up the web app using Apache
+  when: web_setup_type == 'apache'
+  block: 
+    - name: install Apache
+      ansible.builtin.include_role: 
+        name: geerlingguy.apache
+  
+    - name: unzip the web app into /var/www/html
+      ansible.builtin.unarchive: 
+        src: "{{ web_setup_url }}"
+        dest: /var/www/html
+        remote_src: yes
+
+- name: set up the web app using Node JS
+  when: web_setup_type == 'nodejs'
+  block:
+    - name: install Node JS
+      ansible.builtin.include_role:
+        name: geerlingguy.nodejs
+
+    - name: create nodejs user
+      ansible.builtin.user: 
+        name: nodejs
+        system: yes
+        shell: /bin/false
+        home: /opt/nodejs
+
+    - name: unzip the web app into the user's home directory
+      ansible.builtin.unarchive:
+        src: "{{ web_setup_url }}"
+        dest: /opt/nodejs
+        remote_src: yes
+
+    - name: set permissions on web app files
+      ansible.builtin.file:
+        path: /opt/nodejs
+        state: directory
+        recurse: yes
+        owner: nodejs
+        group: nodejs
+
+    - name: find server.js so we can run the server
+      ansible.builtin.find:
+        path: /opt/nodejs
+        pattern: "server.js"
+        recurse: true
+        #limit: 1   # added in Ansible 2.18, and Ludus is on 2.16, so it's not supported yet
+      register: server_file  # essentially a variable that has the file's path
+
+    - name: fail if server.js is not found
+      ansible.builtin.fail: 
+        msg: "ERROR: server.js not found. If the Node JS web app runs under a different name, rename it to 'server.js' and try again."
+      when: server_file.matched == 0
+
+    - name: create the nodejs systemd service file
+      ansible.builtin.template: 
+        src: templates/service.j2
+        dest: /etc/systemd/system/nodejs.service
+      
+    - name: reload systemd daemon
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: start NodeJS service
+      ansible.builtin.service: 
+        name: nodejs
+        state: started
+        enabled: yes
