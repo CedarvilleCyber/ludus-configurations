@@ -3,4 +3,4 @@
   ansible.builtin.lineinfile:
     path: /etc/security/limits.d/ansible.conf
     create: true
-    line: * hard maxlogins 2
+    line: "{{ limit_ssh_conn_user }} hard maxlogins 1"
