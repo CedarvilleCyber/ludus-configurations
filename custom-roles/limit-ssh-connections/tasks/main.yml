@@ -1,0 +1,6 @@
+---
+- name: limit SSH server to one session at a time
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.d/ansible.conf
+    create: true
+    line: * hard maxlogins 2

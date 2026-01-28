@@ -12,10 +12,12 @@ ludus:
     cpus: 2
     linux: 
       packages: 
+        - vim
         - curl
         - man
     roles: 
       - web-setup
+      - limit-ssh-connections
     role_vars:
       web_setup_type: nodejs 
       web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/CedarbitsSite1.zip"
@@ -30,6 +32,22 @@ ludus:
     cpus: 2
     linux: 
       packages: 
+        - vim
+        - nmap
+        - curl
+        - tmux
+        - man
+  
+  - vm_name: "{{ range_id }}-student-vm-2"
+    hostname: "student-2"
+    template: kali-x64-desktop-template
+    vlan: 2
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - vim
         - nmap
         - curl
         - tmux
