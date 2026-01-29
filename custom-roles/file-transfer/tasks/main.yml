@@ -1,15 +1,19 @@
 ---
 
-- name: Ensure dst dir exists
-  file:
-    path: "{{ file_transfer_dst_dir }}"
+# Note: if the directory does not yet exist and the user did not specify its intended
+# permissions, Ansible uses the target machine's defaults to set the permissions
+- name: create dest dir and set permissions if user specified them
+  ansible.builtin.file:
+    path: "{{ file_transfer_dest | dirname }}"
     state: directory
-    mode: "{{ file_transfer_dst_dir_mode }}"
+    mode: "{{ file_transfer_dest_dir_mode | default(omit) }}"
+    owner: "{{ file_transfer_owning_user | default(omit) }}"
+    group: "{{ file_transfer_owning_user | default(omit) }}"
 
 - name: Copy file
-  copy:
+  ansible.builtin.copy:
     src: "{{ file_transfer_src }}"
-    dest: "{{ file_transfer_dst_dir ~ '/' ~ file_transfer_dst_file }}"
-    owner: "{{ file_transfer_file_owner }}"
-    group: "{{ file_transfer_file_group }}"
-    mode: "{{ file_transfer_dst_file_mode }}"
+    dest: "{{ file_transfer_dest }}"
+    owner: "{{ file_transfer_owning_user | default(omit) }}"
+    group: "{{ file_transfer_owning_user | default(omit) }}"
+    mode: "{{ file_transfer_file_mode | default(omit) }}"
