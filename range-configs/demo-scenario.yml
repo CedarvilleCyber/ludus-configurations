@@ -40,7 +40,7 @@ ludus:
       - file-transfer
       - add-user
     role_vars:
-      file_transfer_src: "/home/jericho-ludus/ludus-configs/custom-roles/file-transfer/files/demo-website/"
+      file_transfer_src: "/home/jericho-ludus/ludus-configs/range-configs/demo-website/"
       file_transfer_dst_dir: "/var/www/html"
       file_transfer_dst_file: "/"
       file_transfer_file_owner: "www-data"
