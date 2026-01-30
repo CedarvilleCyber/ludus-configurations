@@ -1,8 +1,6 @@
 ---
 - name: create user
   ansible.builtin.user:
-    name: "{{ user }}"
-    password: "{{ password }}" # this takes in a hash for /etc/shadow
-    generate_ssh_key: true
-    ssh_key_passphrase: "dragon"
+    name: "{{ addusr_user }}"
+    password: "{{ addusr_pass }}" # this takes in a hash for /etc/shadow
     shell: /bin/bash

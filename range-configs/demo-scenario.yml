@@ -46,8 +46,8 @@ ludus:
       file_transfer_file_owner: "www-data"
       file_transfer_file_group: "www-data"
       clean_folder_path: "/var/www/html/index.html"
-      user: "erikwilliams"
-      password: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
+      addusr_user: "erikwilliams"
+      addusr_pass: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
 
   - vm_name: "{{ range_id }}-demo-ics-server"
     hostname: "{{ range_id}}-ics-server"

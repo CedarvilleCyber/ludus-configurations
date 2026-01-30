@@ -4,15 +4,13 @@
 
 file_transfer_src: "temp.txt"
 
-file_transfer_dst_dir: "/tmp"
+# This should be an absolute path, following Ansible convention 
+# (see ansible.builtin.copy dest)
+file_transfer_dest: "/tmp/temp.txt"
 
-file_transfer_dst_file: "temp.txt"
+# These are intentionally left blank to rely on Ansible's default behavior.
+# If you set the mode (permissions), USE QUOTES.
+file_transfer_owning_user: null
 
-file_transfer_dst_dir_mode: "0655"
-
-file_transfer_dst_file_mode: "0644"
-
-file_transfer_file_owner: "root"
-
-file_transfer_file_group: "root"
-
+file_transfer_dir_mode: null
+file_transfer_file_mode: null
