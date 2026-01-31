@@ -95,7 +95,7 @@ client = ModbusTCP('192.0.2.101', port=502)
 client.connect()
 
 print("Running the rapid traffic light test script.")
-print("You should see the traffic light rapidly change colors for five seconds.")
+print("You should see the traffic light rapidly change colors for a few seconds.")
 init_time = time()
 
 try:
@@ -111,15 +111,12 @@ try:
             start_read = 0
             result = client.read_coils(start_read, 8, slave=1)
             
-            for counter, value in enumerate(result, start=start_read):
-                print(f"Coil {counter}: {value}")
-                print()
-            
-            if time() >= init_time + 5:
+            if time() >= init_time + 7:
+                print("Testing done. Exiting now")
                 client.close()
                 sys.exit(0)
 
-            sleep(0.03)
+            sleep(0.02)
 except:
     pass
 
