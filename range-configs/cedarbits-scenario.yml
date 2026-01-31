@@ -25,42 +25,10 @@ ludus:
       addusr_user: "chappie"
       addusr_pass: "$y$j9T$j0NP79HnmII28sK.FJ1wZ/$9GQuxGzOn0oBLO4dLYMH6nRt7X.HZD9QHYyt76cop52"
       limit_ssh_conn_user: "chappie"
-      file_transfer_src: /home/admin/ludus-configurations/cedarbits-payload.py
+      file_transfer_src: /home/jericho-ludus/ludus-configs/cedarbits-payload.py
       file_transfer_dest: /home/chappie/.traffic-light-test-scripts/rapid-lights.py
       file_transfer_owning_user: "chappie"
       file_transfer_file_mode: "755"
-
-
-  # Note: vlan numbers must be between 2 and 255 (inclusive), so don't use vlan 1
-  - vm_name: "{{ range_id }}-student-vm-1"
-    hostname: "student-1"
-    template: kali-x64-desktop-template
-    vlan: 100
-    ip_last_octet: 1
-    ram_gb: 4
-    cpus: 2
-    linux: 
-      packages: 
-        - vim
-        - nmap
-        - curl
-        - tmux
-        - man
-  
-  - vm_name: "{{ range_id }}-student-vm-2"
-    hostname: "student-2"
-    template: kali-x64-desktop-template
-    vlan: 2
-    ip_last_octet: 1
-    ram_gb: 4
-    cpus: 2
-    linux: 
-      packages: 
-        - vim
-        - nmap
-        - curl
-        - tmux
-        - man
 
 network:
   inter_vlan_default: REJECT
