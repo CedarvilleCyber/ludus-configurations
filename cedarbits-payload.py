@@ -89,9 +89,9 @@ class ModbusTCP:
 
 # Main script
 # The traffic pi's primary ip is 192.168.8.12, but we can't hit that one.
-# It has another IP in the Ludus network, which is 192.0.2.101, so 
+# It has another IP in the Ludus network, which is 192.0.2.102, so 
 # that's what we'll use.
-client = ModbusTCP('192.0.2.101', port=502)
+client = ModbusTCP('192.0.2.102', port=502)
 client.connect()
 
 print("Running the rapid traffic light test script.")
