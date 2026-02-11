@@ -1,0 +1,81 @@
+# yaml-language-server: =https://docs.ludus.cloud/schemas/range-config.json
+
+ludus: 
+  # Subnet 1: DMZ
+  - vm_name: "{{ range_id }}-web-server"
+    hostname: "web-server"
+    template: debian-12-x64-server-template
+    vlan: 11
+    ip_last_octet: 49
+    ram_gb: 4
+    cpus: 2
+    linux: true
+    roles: 
+      - web-setup
+      - add-user
+    role_vars:
+      web_setup_type: apache
+      web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/example-website.zip"
+      addusr_user: "erikwilliams"
+      addusr_pass: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
+
+  - vm_name: "{{ range_id }}-ftp-server"
+    hostname: "ftp-server"
+    template: debian-12-x64-server-template
+    vlan: 11
+    ip_last_octet: 78
+    ram_gb: 4
+    cpus: 2
+    linux: true
+    
+  - vm_name: "{{ range_id }}-honeypot"
+    hostname: "security-dev"
+    template: debian-12-x64-server-template
+    vlan: 11
+    ip_last_octet: 102
+    ram_gb: 4
+    cpus: 2
+    linux: true
+      
+  # subnet 2: IT
+  - vm_name: "{{ range_id }}-workstation-1"
+    hostname: "workstation-1"
+    template: win11-22h2-x64-enterprise-template
+    vlan: 12
+    ip_last_octet: 112
+    ram_gb: 8
+    cpus: 4
+    windows: 
+      office_version: 2021
+
+  - vm_name: "{{ range_id }}-workstation-2"
+    hostname: "workstation-2"
+    template: win11-22h2-x64-enterprise-template
+    vlan: 12
+    ip_last_octet: 207
+    ram_gb: 8
+    cpus: 4
+    windows: 
+      office_version: 2021
+
+  - vm_name: "{{ range_id }}-workstation-3"
+    hostname: "workstation-3"
+    template: win11-22h2-x64-enterprise-template
+    vlan: 12
+    ip_last_octet: 138
+    ram_gb: 8
+    cpus: 4
+    windows: 
+      office_version: 2021
+
+  # subnet 3: OT
+  # Note: you'll have to add this template to Ludus.
+  # Since it's a desktop, we'll give it more RAM & CPU to support the GUI
+  - vm_name: "{{ range_id }}-ot-hmi"
+    hostname: "ot-hmi"
+    template: ubuntu_24.04-x64-desktop  
+    vlan: 13
+    ip_last_octet: 255
+    ram_gb: 6
+    cpus: 4
+    linux: true
