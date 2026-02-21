@@ -1,6 +1,7 @@
 # This is a modified version of the traffic light scenario / demo scenario payload.
 # It was modified to self-terminate after five seconds. 
 
+import requests
 import socket
 import struct
 import sys
@@ -86,6 +87,18 @@ class ModbusTCP:
                 bits.append(0)
                 
         return bits
+
+
+
+
+
+# Trigger the sound effect
+
+sound_result = requests.post('http://192.0.2.104:8000/play', json={"sound":"traffic5.wav"})
+
+if sound_result.status_code == 429:
+    print(f"sound_result.json()")  # Prints error message from sound API ("system in use" message)
+    sys.exit()
 
 # Main script
 # The traffic pi's primary ip is 192.168.8.12, but we can't hit that one.
