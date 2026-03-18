@@ -1,0 +1,57 @@
+# yaml-language-server: $schema=https://docs.ludus.cloud/schemas/range-config.json
+
+ludus: 
+  - vm_name: "{{ range_id }}-web-server"
+    hostname: "jer-web01"
+    template: "debian-12-x64-server-template"
+    vlan: 10
+    ip_last_octet: 139
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - curl
+        - dnsutils
+    roles: 
+      - web-setup
+    role_vars: 
+      web_setup_type: "apache"
+      web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/demo-website.zip"
+
+  - vm_name: "{{ range_id }}-windows-workstation"
+    hostname: "jer-win-42"
+    template: "win11-22h2-x64-enterprise-template"
+    vlan: 11
+    ip_last_octet: 17
+    ram_gb: 8
+    cpus: 4
+    windows: 
+      office_version: 2019
+      office_arch: 64bit
+      
+  - vm_name: "{{ range_id }}-ot-server"
+    hostname: "ot-server"
+    template: "debian-12-x64-server-template"
+    vlan: 12
+    ip_last_octet: 43
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - curl
+        - dnsutils
+        - vsftpd
+
+  - vm_name: "{{ range_id }}-test-kali"
+    hostname: "kali"
+    template: "kali-x64-desktop-template"
+    vlan: 13
+    ip_last_octet: 7
+    ram_gb: 6
+    cpus: 4
+    linux: 
+      packages: 
+        - curl
+        - dnsutils
+        - nmap
+

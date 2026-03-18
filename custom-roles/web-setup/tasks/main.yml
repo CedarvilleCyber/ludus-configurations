@@ -22,7 +22,13 @@
     - name: install Apache
       ansible.builtin.include_role: 
         name: geerlingguy.apache
-  
+
+      # Consider using a when: clause to run this conditionally 
+    - name: install PHP
+      ansible.builtin.include_role: 
+        name: geerlingguy.php
+
+      # Update this so it won't unzip into /var/www/html/demo-website
     - name: unzip the web app into /var/www/html
       ansible.builtin.unarchive: 
         src: "{{ web_setup_url }}"
