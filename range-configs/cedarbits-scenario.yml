@@ -1,6 +1,7 @@
 # yaml-language-server: $schema=https://docs.ludus.cloud/schemas/range-config.json
 
 ludus: 
+  # traffic light machine
   - vm_name: "{{ range_id }}-traffic-server"
     hostname: "traffic-server"
     template: debian-12-x64-server-template
@@ -29,6 +30,35 @@ ludus:
       file_transfer_dest: /home/chappie/.traffic-light-test-scripts/rapid-lights.py
       file_transfer_owning_user: "chappie"
       file_transfer_file_mode: "755"
+
+  # put nuclear web server here
+
+  # nuclear AD machine (for LDAP and maybe SMB)
+  - vm_name: "{{ range_id }}-ad-dc-win2022-server-x64"
+    hostname: "{{ range_id }}-DC01-2022"
+    template: win2022-server-x64-template
+    vlan: 99  # change later
+    ip_last_octet: 228
+    ram_gb: 8
+    cpus: 4
+    windows: 
+      gpos: 
+       - anon_share_access
+  # you may need to use the "domain" key to make LDAP work
+
+  # Kali for testing
+  - vm_name: "{{range_id }}-test-kali"
+    hostname: "kali"
+    template: kali-x64-desktop-template
+    vlan: 200
+    ip_last_octet: 1
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - curl
+        - nmap
+        # check if you need to add man here
 
 network:
   inter_vlan_default: REJECT

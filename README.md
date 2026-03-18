@@ -28,6 +28,9 @@ ludus range deploy # builds the range specified by the config.yml
 ludus range inventory > ludus-inventory.yml # do after range finishes building
 ansible-playbook rm-default-creds-playbook.yml -i ludus-inventory.yml
 ```
+### Non-Default Templates
+Some Ludus scenarios require templates that don't come with the default Ludus
+install. To set them up, refer to the Ludus template documentation.
 ## Ansible Roles
 ### Public Ansible Roles
 If a training scenario requires a public Ansible role, you'll get an error like 
