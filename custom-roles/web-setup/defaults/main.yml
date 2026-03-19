@@ -5,4 +5,4 @@
 # Valid values: 'apache' or 'nodejs'
 web_setup_type: apache
 
-web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/example-website.zip"
+web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/example-site.tar.gz"

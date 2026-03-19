@@ -27,13 +27,15 @@
     - name: install PHP
       ansible.builtin.include_role: 
         name: geerlingguy.php
+      vars: 
+        php_packages_extra: [ libapache2-mod-php ] 
 
-      # Update this so it won't unzip into /var/www/html/demo-website
     - name: unzip the web app into /var/www/html
       ansible.builtin.unarchive: 
         src: "{{ web_setup_url }}"
         dest: /var/www/html
         remote_src: yes
+        extra_opts: ["--strip-components=1"]
 
 - name: set up the web app using Node JS
   when: web_setup_type == 'nodejs'

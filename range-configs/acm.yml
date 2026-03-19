@@ -13,6 +13,8 @@ ludus:
         - curl
         - dnsutils
         - nmap
+        - tmux
+        - vim
 
   - vm_name: "{{ range_id }}-web-server"
     hostname: "jer-web01"
@@ -25,11 +27,13 @@ ludus:
       packages: 
         - curl
         - dnsutils
+        - tmux
+        - vim
     roles: 
       - web-setup
     role_vars: 
       web_setup_type: "apache"
-      web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/demo-website.zip"
+      web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/demo-website.tar.gz"
 
   - vm_name: "{{ range_id }}-windows-workstation"
     hostname: "jer-win-42"
