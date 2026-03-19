@@ -1,6 +1,19 @@
 # yaml-language-server: $schema=https://docs.ludus.cloud/schemas/range-config.json
 
 ludus: 
+  - vm_name: "{{ range_id }}-test-kali"
+    hostname: "kali"
+    template: "kali-x64-desktop-template"
+    vlan: 9
+    ip_last_octet: 7
+    ram_gb: 6
+    cpus: 4
+    linux: 
+      packages: 
+        - curl
+        - dnsutils
+        - nmap
+
   - vm_name: "{{ range_id }}-web-server"
     hostname: "jer-web01"
     template: "debian-12-x64-server-template"
@@ -42,16 +55,56 @@ ludus:
         - dnsutils
         - vsftpd
 
-  - vm_name: "{{ range_id }}-test-kali"
-    hostname: "kali"
-    template: "kali-x64-desktop-template"
-    vlan: 13
-    ip_last_octet: 7
-    ram_gb: 6
-    cpus: 4
-    linux: 
-      packages: 
-        - curl
-        - dnsutils
-        - nmap
+network: 
+  inter_vlan_default: REJECT
+  rules: 
+  - name: allow public vlan to ping DMZ vlan
+    vlan_src: 9
+    vlan_dst: 10
+    protocol: icmp
+    ports: all
+    action: ACCEPT
+  - name: allow public vlan to DMZ vlan on port 22
+    vlan_src: 9
+    vlan_dst: 10
+    protocol: tcp
+    ports: 22
+    action: ACCEPT
+  - name: allow public vlan to DMZ vlan on port 80
+    vlan_src: 9
+    vlan_dst: 10
+    protocol: tcp
+    ports: 80
+    action: ACCEPT
+  - name: allow public vlan to DMZ vlan on port 443
+    vlan_src: 9
+    vlan_dst: 10
+    protocol: tcp
+    ports: 443
+    action: ACCEPT
 
+  - name: allow DMZ vlan to ping IT vlan
+    vlan_src: 10
+    vlan_dst: 11
+    protocol: icmp
+    ports: all
+    action: ACCEPT
+  - name: allow all TCP traffic from DMZ vlan to IT vlan
+    vlan_src: 10
+    vlan_dst: 11
+    protocol: tcp
+    ports: all
+    action: ACCEPT
+
+  - name: allow IT vlan to ping OT vlan
+    vlan_src: 11
+    vlan_dst: 12
+    protocol: icmp
+    ports: all
+    action: ACCEPT
+  - name: allow all TCP traffic from IT vlan to OT vlan
+    vlan_src: 11
+    vlan_dst: 12
+    protocol: tcp
+    ports: all
+    action: ACCEPT
