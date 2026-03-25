@@ -33,12 +33,14 @@ ludus:
     roles: 
       - web-setup
       - add-user
+      - privesc
     role_vars: 
       web_setup_type: "apache"
       web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/acm-site.tar.gz"
         # TODO: change these creds
       addusr_user: "ewilliams"
       addusr_pass: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
+      ludus_privesc_binary: "python3"
 
 #  - vm_name: "{{ range_id }}-windows-workstation"
 #    hostname: "jer-win-42"

@@ -82,8 +82,10 @@ If you encounter trouble deploying a range, use these commands to troubleshoot:
 `ludus range logs --verbose`
 `ludus range errors --verbose`
 
-At the time of writing, Ludus has a bug where newlines are printed as the literal
-"\n" characters instead of printing as a newline. To work around that, do this: 
-`ludus range errors --verbose 2>&1 | sed 's/\\n/\n/g' | less`
-
+When using the verbose flag to view Ludus errors, Ludus prints newlines as the 
+literal "\n" characters instead of printing as a newline. To work around that, 
+do this: 
+```
+ludus range errors --verbose 2>&1 | sed 's/\\n/\n/g' | less
+```
 

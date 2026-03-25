@@ -1,51 +1,33 @@
 ---
-- name: Verify that ludus_privesc_binary is defined w/ package facts
-  ansible.builtin.package_facts:
-    manager: auto
-
-- name: Install binary if not found
+- name: Install binary 
   ansible.builtin.package:
     name: "{{ ludus_privesc_binary }}"
     state: present
-  when: ludus_privesc_binary not in ansible_facts.packages
+  
+- name: get {{ ludus_privesc_binary }} path
+  ansible.builtin.command: which {{ ludus_privesc_binary }}
+  register: binary_path
+  changed_when: false
 
-- name: Retrieve full binary path
-  ansible.builtin.find:
-    paths:
-      - /usr/bin
-      - /usr/sbin
-      - /
-    file_type: file
-    use_regex: true
-    patterns: "^{{ ludus_privesc_binary }}$"
-    recurse: true
-    limit: 1
-  register: ludus_privesc_binary_find
-
-- name: Fail if binary not found
-  ansible.builtin.fail:
-    msg: "Binary {{ ludus_privesc_binary }} could not be found in PATH"
-  when: ludus_privesc_binary_find.files | length == 0
-
-- name: Set binary path fact
-  ansible.builtin.set_fact:
-    ludus_privesc_binary_path: "{{ ludus_privesc_binary_find.files[0].path }}"
+- name: print binary path
+  ansible.builtin.debug: 
+    msg: "{{ ludus_privesc_binary }}'s path is {{ binary_path.stdout }}"
 
 - name: Set SUID bit on binary
   ansible.builtin.file:
-    path: "{{ ludus_privesc_binary_path }}"
+    path: "{{ binary_path.stdout }}"
     mode: '4755'
+  become: true
   register: ludus_privesc_suid_result
 
 - name: Verify SUID bit is set
   ansible.builtin.stat:
-    path: "{{ ludus_privesc_binary_path }}"
-  register: ludus_privesc_binary_stat
+    path: "{{ binary_path.stdout }}"
+  register: binary_stat
 
 - name: Display SUID status
   ansible.builtin.debug:
     msg: |
       Binary: {{ ludus_privesc_binary }}
-      Path: {{ ludus_privesc_binary_path }}
-      SUID bit set: {{ ludus_privesc_binary_stat.stat.suid }}
-      Mode: {{ ludus_privesc_binary_stat.stat.mode }}
+      Path: {{ binary_path }}
+      Mode: {{ binary_stat.stat.mode }}

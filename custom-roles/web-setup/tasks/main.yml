@@ -30,6 +30,11 @@
       vars: 
         php_packages_extra: [ libapache2-mod-php ] 
 
+    - name: remove default index.html
+      ansible.builtin.file: 
+        path: /var/www/html/index.html
+        state: absent
+
     - name: unzip the web app into /var/www/html
       ansible.builtin.unarchive: 
         src: "{{ web_setup_url }}"
