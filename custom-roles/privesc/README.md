@@ -1,15 +1,6 @@
-# README
+# Ansible Role: Privilege Escalation Binary Setup ([Ludus](https://ludus.cloud))
 
-This template includes a task yml for caching downloads to the Ludus host (download_file.yml) as well as GitHub action to push the role to Ansible Galaxy when a tag is created in git. You'll need to get a [Galaxy token](https://galaxy.ansible.com/ui/token/) and set it as `GALAXY_API_KEY` in [Github Secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) for the Ansible Galaxy deployment to work correctly.
-
-Remove this section, and replace all `{{ variable }}` strings. Write your tasks in `./tasks/main.yml`
-
-# Ansible Role: {{ Thing }} ([Ludus](https://ludus.cloud))
-
-An Ansible Role that installs [{{ Something }}](https://example.com) on {{ type of host }} and optionally configures [{{ Another Thing }}](https://example).
-
-> [!WARNING]
-> This is a warning about something in this role
+An Ansible Role that configures a binary for privilege escalation in cyber training scenarios. This role verifies the binary exists on the system, installs it if necessary, and sets the SUID bit to enable privilege escalation.
 
 ## Requirements
 
@@ -19,8 +10,10 @@ None.
 
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
-    # This is a comment explaining the variable below
-    ludus_thing_variable1: true
+    # The binary name to configure for privilege escalation
+    ludus_privesc_binary: ""
+
+Set `ludus_privesc_binary` to the name of the binary you want to configure (e.g., `sudo`, `passwd`, `cp`, etc.).
 
 ## Dependencies
 
@@ -29,34 +22,17 @@ None.
 ## Example Playbook
 
 ```yaml
-- hosts: {{ thing }}_hosts
+- hosts: linux_hosts
   roles:
-    - {{ your github username }}.{{ this repo name }}
+    - privesc
   vars:
-    {{ role vars here }}
+    ludus_privesc_binary: "cp"
 ```
+## How It Works
 
-## Example Ludus Range Config
-
-```yaml
-ludus:
-  - vm_name: "{{ range_id }}-ad-dc-win2022-server-x64-1"
-    hostname: "{{ range_id }}-DC01-2022"
-    template: win2022-server-x64-template
-    vlan: 10
-    ip_last_octet: 11
-    ram_gb: 6
-    cpus: 4
-    windows:
-      sysprep: true
-    domain:
-      fqdn: ludus.domain
-      role: primary-dc
-    roles:
-      - {{ your github username }}.{{ this repo name }}
-    role_vars:
-      {{ example role var usage }}
-```
+1. Verifies the binary exists on the system
+2. Attempts to install the binary via package manager if not found
+3. Sets the SUID (Set User ID) bit on the binary, allowing it to execute with owner privileges
 
 ## License
 
@@ -65,4 +41,4 @@ GPLv3
 
 ## Author Information
 
-This role was created by [{{Your Github Username}}](https://github.com/{{ your github username }}), for [Ludus](https://ludus.cloud/).
+This role was created by David-B-Moore for [Ludus](https://ludus.cloud/).
