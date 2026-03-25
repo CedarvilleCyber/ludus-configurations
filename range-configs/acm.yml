@@ -12,9 +12,10 @@ ludus:
       packages: 
         - curl
         - dnsutils
-        - nmap
         - tmux
         - vim
+        - nmap
+        - gobuster
 
   - vm_name: "{{ range_id }}-web-server"
     hostname: "jer-web01"
@@ -31,20 +32,24 @@ ludus:
         - vim
     roles: 
       - web-setup
+      - add-user
     role_vars: 
       web_setup_type: "apache"
-      web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/demo-website.tar.gz"
+      web_setup_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/acm-site.tar.gz"
+        # TODO: change these creds
+      addusr_user: "ewilliams"
+      addusr_pass: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
 
-  - vm_name: "{{ range_id }}-windows-workstation"
-    hostname: "jer-win-42"
-    template: "win11-22h2-x64-enterprise-template"
-    vlan: 11
-    ip_last_octet: 17
-    ram_gb: 8
-    cpus: 4
-    windows: 
-      office_version: 2019
-      office_arch: 64bit
+#  - vm_name: "{{ range_id }}-windows-workstation"
+#    hostname: "jer-win-42"
+#    template: "win11-22h2-x64-enterprise-template"
+#    vlan: 11
+#    ip_last_octet: 17
+#    ram_gb: 8
+#    cpus: 4
+#    windows:
+#      office_version: 2019
+#      office_arch: 64bit
       
   - vm_name: "{{ range_id }}-ot-server"
     hostname: "ot-server"
@@ -68,23 +73,13 @@ network:
     protocol: icmp
     ports: all
     action: ACCEPT
-  - name: allow public vlan to DMZ vlan on port 22
+
+    # NOTE: you must have Ludus 2.0.10 or newer to use a comma-separated port list
+  - name: allow public vlan to DMZ vlan on port 22, 80, and 443
     vlan_src: 9
     vlan_dst: 10
     protocol: tcp
-    ports: 22
-    action: ACCEPT
-  - name: allow public vlan to DMZ vlan on port 80
-    vlan_src: 9
-    vlan_dst: 10
-    protocol: tcp
-    ports: 80
-    action: ACCEPT
-  - name: allow public vlan to DMZ vlan on port 443
-    vlan_src: 9
-    vlan_dst: 10
-    protocol: tcp
-    ports: 443
+    ports: 22, 80, 443
     action: ACCEPT
 
   - name: allow DMZ vlan to ping IT vlan
