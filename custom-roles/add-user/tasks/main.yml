@@ -4,3 +4,4 @@
     name: "{{ addusr_user }}"
     password: "{{ addusr_pass }}" # this takes in a hash for /etc/shadow
     shell: /bin/bash
+    generate_ssh_key: "{{ addusr_ssh_key }}"
