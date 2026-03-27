@@ -23,12 +23,48 @@
       ansible.builtin.include_role: 
         name: geerlingguy.apache
 
-      # Consider using a when: clause to run this conditionally 
+      # Consider using a when: clause to run these conditionally
+
+    - name: install MySQL
+      ansible.builtin.include_role: 
+        name: geerlingguy.mysql
+        apply: 
+          become: true
+      vars: 
+        mysql_databases: 
+          - name: traffic_db
+        mysql_users: 
+          - name: ansible
+            host: localhost
+            password: fascinatingly-complex35charAuthpass
+            priv: "*.*:ALL"
+          - name: webuser
+            host: localhost
+            password: nevergonna-GIVE-YOU-UP
+            priv: "traffic_db.*:ALL"
+
+    - name: download MySQL database file # this is the SQL dump file FOR THIS SPECIFIC SCENARIO
+      ansible.builtin.get_url:
+        url: "{{ web_setup_sql_url }}"
+        dest: /tmp/db.sql
+
+    - name: import records from .sql dump file
+      community.mysql.mysql_db: 
+        name: traffic_db
+        state: import
+        target: /tmp/db.sql
+        login_user: ansible
+        login_password: fascinatingly-complex35charAuthpass
+      become: true
+
     - name: install PHP
       ansible.builtin.include_role: 
         name: geerlingguy.php
       vars: 
-        php_packages_extra: [ libapache2-mod-php ] 
+        php_packages_extra: [ 
+          libapache2-mod-php,
+          php-mysqli
+      ] 
 
     - name: remove default index.html
       ansible.builtin.file: 
@@ -37,7 +73,7 @@
 
     - name: unzip the web app into /var/www/html
       ansible.builtin.unarchive: 
-        src: "{{ web_setup_url }}"
+        src: "{{ web_setup_app_url }}"
         dest: /var/www/html
         remote_src: yes
         extra_opts: ["--strip-components=1"]
@@ -48,6 +84,7 @@
         state: directory
         recurse: true
         mode: '0755'
+        owner: www-data
 
 - name: set up the web app using Node JS
   when: web_setup_type == 'nodejs'
