@@ -22,6 +22,12 @@
     - name: install Apache
       ansible.builtin.include_role: 
         name: geerlingguy.apache
+      vars: 
+        apache_create_vhosts: true
+        apache_vhosts:       
+          - servername: "{{ web_setup_servername }}" # not working for some reason??
+            documentroot: "/var/www/html"
+            options: "-Indexes +FollowSymLinks" # similarly nonfunctional
 
       # Consider using a when: clause to run these conditionally
 

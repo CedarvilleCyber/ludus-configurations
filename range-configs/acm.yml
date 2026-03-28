@@ -37,6 +37,7 @@ ludus:
       - privesc
     role_vars: 
       web_setup_type: "apache"
+      web_setup_servername: "jerichotraffic.org"
       web_setup_app_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/acm-site.tar.gz"
       web_setup_sql_url: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/database_setup.sql"
         # TODO: change these creds
@@ -68,6 +69,12 @@ ludus:
         - curl
         - dnsutils
         - vsftpd
+    
+    # Try using just the vsftpd package first. If that doesn't work, try this: 
+#    roles: 
+#      - bertvv.vsftpd
+#    role_vars: 
+#      - vsftpd_anon_root: /srv/shares/public
 
 network: 
   inter_vlan_default: REJECT

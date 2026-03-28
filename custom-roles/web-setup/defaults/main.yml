@@ -4,7 +4,7 @@
 
 # Valid values: 'apache' or 'nodejs'
 web_setup_type: apache
+web_setup_servername: ""
 
 web_setup_app_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/example-site.tar.gz"
-
 web_setup_sql_url: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/database_setup.sql"
