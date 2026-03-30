@@ -42,20 +42,20 @@ ludus:
       web_setup_sql_url: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/database_setup.sql"
         # TODO: change these creds
       addusr_user: "ewilliams"
-      addusr_pass: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4"
+      addusr_pass: "$y$j9T$zG5e2v4BmN0gnBkNFsrR8.$hJMiEhrVEGK/M/bIjFz0SKoKtWX98Fd9qVd9DhVrvd4" # dragon
       addusr_ssh_key: true
       ludus_privesc_binary: "python3"
 
-#  - vm_name: "{{ range_id }}-windows-workstation"
-#    hostname: "jer-win-42"
-#    template: "win11-22h2-x64-enterprise-template"
-#    vlan: 11
-#    ip_last_octet: 17
-#    ram_gb: 8
-#    cpus: 4
-#    windows:
-#      office_version: 2019
-#      office_arch: 64bit
+  - vm_name: "{{ range_id }}-windows-workstation"
+    hostname: "jer-win-42"
+    template: "win11-22h2-x64-enterprise-template"
+    vlan: 11
+    ip_last_octet: 17
+    ram_gb: 8
+    cpus: 4
+    windows:
+      office_version: 2019
+      office_arch: 64bit
       
   - vm_name: "{{ range_id }}-ot-server"
     hostname: "ot-server"
@@ -69,6 +69,11 @@ ludus:
         - curl
         - dnsutils
         - vsftpd
+    roles: 
+      - add-user
+    role_vars: 
+      - addusr_user: "admin"
+      - addusr_pass: "$2a$10$9XHaoijESE.2YdNuty04nudZShNegJhggibQYMoZT8eoCS.ecsHuK" # swiss-cheese
     
     # Try using just the vsftpd package first. If that doesn't work, try this: 
 #    roles: 
