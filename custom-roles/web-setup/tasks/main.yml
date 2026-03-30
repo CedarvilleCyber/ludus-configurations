@@ -22,7 +22,8 @@
     - name: install Apache
       ansible.builtin.include_role: 
         name: geerlingguy.apache
-      vars: 
+      vars:
+        apache_remove_default_vhost: true 
         apache_create_vhosts: true
         apache_vhosts:       
           - servername: "{{ web_setup_servername }}" # not working for some reason??
