@@ -1,7 +1,7 @@
 ---
-- name: Install binary 
+- name: Install the binary's package
   ansible.builtin.package:
-    name: "{{ ludus_privesc_binary }}"
+    name: "{{ ludus_privesc_package }}"
     state: present
   
 - name: get {{ ludus_privesc_binary }} path
