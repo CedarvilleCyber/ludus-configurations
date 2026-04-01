@@ -27,10 +27,12 @@ ludus:
     cpus: 2
     linux: 
       packages: 
+        - man
         - curl
         - dnsutils
         - tmux
         - vim
+        - ftp # this is an FTP client, not server
     roles: 
       - web-setup
       - add-user
@@ -40,11 +42,12 @@ ludus:
       web_setup_servername: "jerichotraffic.org"
       web_setup_app_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/acm-site.tar.gz"
       web_setup_sql_url: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/database_setup.sql"
-        # TODO: change these creds
       addusr_user: "ewilliams"
-      addusr_pass: "dragon"
-      addusr_ssh_key: true
-      ludus_privesc_binary: "python3"
+      addusr_pass: "elegant-little-crab"
+      addusr_sudo: true
+      addusr_gen_ssh_key: true
+      ludus_privesc_binary: "base64"
+      ludus_privesc_package: "coreutils"
 
 #  - vm_name: "{{ range_id }}-windows-workstation"
 #    hostname: "jer-win-42"
@@ -57,29 +60,30 @@ ludus:
 #      office_version: 2019
 #      office_arch: 64bit
 #      
-#  - vm_name: "{{ range_id }}-ot-server"
-#    hostname: "ot-server"
-#    template: "debian-12-x64-server-template"
-#    vlan: 12
-#    ip_last_octet: 43
-#    ram_gb: 4
-#    cpus: 2
-#    linux: 
-#      packages: 
-#        - curl
-#        - dnsutils
-#        - vsftpd
-#    roles: 
-#      - add-user
-#    role_vars: 
-#      - addusr_user: "admin"
-#      - addusr_pass: "swiss-cheese"
-    
-    # Try using just the vsftpd package first. If that doesn't work, try this: 
-#    roles: 
-#      - bertvv.vsftpd
-#    role_vars: 
-#      - vsftpd_anon_root: /srv/shares/public
+  - vm_name: "{{ range_id }}-ot-server"
+    hostname: "ot-server"
+    template: "debian-12-x64-server-template"
+    vlan: 11 # NOTE: change back to 12 if you get the windows workstation working
+    ip_last_octet: 43
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - man
+        - curl
+        - dnsutils
+        - tmux
+    roles: 
+      - add-user
+      - bertvv.vsftpd
+      - file-transfer
+    role_vars: 
+      addusr_user: "admin"
+      addusr_pass: "intellectual-shellfish" # follows an adjective-noun password policy
+      addusr_sudo: true
+      vsftpd_anon_root: /srv/shares/public
+      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/ot-pwd-policy.md"
+      file_transfer_dst: "/srv/shares/public/password-policy.md"
 
 network: 
   inter_vlan_default: REJECT
