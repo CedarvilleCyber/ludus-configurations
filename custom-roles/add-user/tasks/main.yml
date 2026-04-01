@@ -4,4 +4,27 @@
     name: "{{ addusr_user }}"
     password: "{{ addusr_pass | password_hash('bcrypt') }}"
     shell: /bin/bash
-    generate_ssh_key: "{{ addusr_ssh_key }}"
+    generate_ssh_key: "{{ addusr_gen_ssh_key | bool }}"
+  register: user_info
+
+- name: add SSH key to authorized_keys file
+  ansible.posix.authorized_key: 
+    user: "{{ addusr_user }}"
+    key: "{{ user_info.ssh_public_key }}"
+  when: addusr_gen_ssh_key | bool
+
+- name: configure passwordless sudo for user
+  ansible.builtin.copy:
+    content: "{{ addusr_user }} ALL=(ALL) NOPASSWD:ALL\n"
+    dest: "/etc/sudoers.d/{{ addusr_user }}"
+    owner: root
+    group: root
+    mode: '0440'
+  when: addusr_sudo
+
+- name: add-user debug statement
+  ansible.builtin.debug: 
+    msg: 
+    - "name is {{ addusr_user }}"
+    - "generate_ssh_key is {{ addusr_gen_ssh_key }}"
+    - "sudo bool is {{ addusr_sudo }}"

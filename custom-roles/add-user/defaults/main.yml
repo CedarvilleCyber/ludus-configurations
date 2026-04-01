@@ -2,7 +2,6 @@
 # Role variables should all be prefaced with the name of the role to avoid
 # name conflicts with other roles
 addusr_user: sysadmin
-  # Note: the ansible.builtin.user module takes in a HASH, not the password itself.
-addusr_pass: $y$j9T$3L1k.33/cEtqPUhwQYAgA.$zfwXZPmO1SWdS7EvJE6BAnJiJ4GGqvgdrLz0np9Y4MC
-
-addusr_ssh_key: false
+addusr_pass: password
+addusr_sudo: false
+addusr_gen_ssh_key: false
