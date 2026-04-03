@@ -17,6 +17,9 @@ ludus:
         - nmap
         - gobuster
         - seclists
+        - snmp
+        - proxychains4
+        - hydra
 
   - vm_name: "{{ range_id }}-web-server"
     hostname: "jer-web01"
@@ -43,7 +46,7 @@ ludus:
       web_setup_app_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/acm-site.tar.gz"
       web_setup_sql_url: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/database_setup.sql"
       addusr_user: "ewilliams"
-      addusr_pass: "elegant-little-crab"
+      addusr_pass: "elegant-crab"
       addusr_sudo: true
       addusr_gen_ssh_key: true
       ludus_privesc_binary: "base64"
@@ -73,13 +76,14 @@ ludus:
         - curl
         - dnsutils
         - tmux
+        - vim
     roles: 
       - add-user
       - bertvv.vsftpd
       - file-transfer
     role_vars: 
-      addusr_user: "admin"
-      addusr_pass: "intellectual-shellfish" # follows an adjective-noun password policy
+      addusr_user: "mjackson"
+      addusr_pass: "nervous-salmon" # follows an adjective-noun password policy
       addusr_sudo: true
       vsftpd_anon_root: /srv/shares/public
       file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/ot-pwd-policy.md"
