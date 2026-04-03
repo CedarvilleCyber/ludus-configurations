@@ -2,10 +2,10 @@
 dependencies: []
 
 galaxy_info:
-  role_name: ludus_{{ thing }}
-  author: {{ your github username }}
-  description: An Ansible Role that installs {{ Something }} on {{ type of host }} and optionally configures {{ Another Thing }}
-  company: {{ your company or '' }}
+  role_name: snmp
+  author: David-B-Moore
+  description: An Ansible Role that installs an SNMP agent on a Linux distro and configures it for use in a cyber training network.
+  company: Cedarville University
   license: GPLv3
   min_ansible_version: "2.10"
   platforms:

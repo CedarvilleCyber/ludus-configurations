@@ -81,6 +81,7 @@ ludus:
       - add-user
       - bertvv.vsftpd
       - file-transfer
+      - snmp
     role_vars: 
       addusr_user: "mjackson"
       addusr_pass: "nervous-salmon" # follows an adjective-noun password policy
