@@ -20,7 +20,7 @@
     owner: root
     group: root
     mode: "0600"
-  notify: Restart snmpd
+  notify: restart snmpd
 
 - name: Configure SNMPv3 users (createUser directives in persistent store)
   ansible.builtin.template:
@@ -30,7 +30,8 @@
     group: root
     mode: "0600"
   when: snmp_version == "v3" and snmp_v3_users | length > 0
-  notify: Restart snmpd
+  notify: 
+    - restart snmpd
 
 # Add a task to allow SNMP through the firewall?
 
