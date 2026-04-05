@@ -126,6 +126,19 @@ network:
     ports: all
     action: ACCEPT
 
+  - name: allow all UDP traffic from DMZ vlan to IT vlan
+    vlan_src: 10
+    vlan_dst: 11
+    protocol: udp
+    ports: all
+    action: ACCEPT
+  - name: allow all UDP traffic from IT vlan to DMZ vlan
+    vlan_src: 11
+    vlan_dst: 10
+    protocol: udp
+    ports: all
+    action: ACCEPT
+
   - name: allow IT vlan to ping OT vlan
     vlan_src: 11
     vlan_dst: 12
@@ -144,3 +157,17 @@ network:
     protocol: tcp
     ports: all
     action: ACCEPT
+
+  - name: allow all UDP traffic from IT vlan to OT vlan
+    vlan_src: 11
+    vlan_dst: 12
+    protocol: udp
+    ports: all
+    action: ACCEPT
+  - name: allow all UDP traffic from OT vlan to IT vlan
+    vlan_src: 12
+    vlan_dst: 11
+    protocol: udp
+    ports: all
+    action: ACCEPT
+
