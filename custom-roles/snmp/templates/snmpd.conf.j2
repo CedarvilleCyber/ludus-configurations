@@ -30,7 +30,7 @@ view   allview   included   {{ oid }}
 ###############################################################################
 {% if snmp_version in ["v1", "v2c"] %}
 # SNMPv1/v2c — community string access
-rocommunity {{ snmp_community_string }} {{ snmp_community_source }}
+rocommunity {{ snmp_community_string }} {{ snmp_community_source }} -V allview
 {% endif %}
 
 {% if snmp_version == "v3" %}
@@ -42,7 +42,6 @@ rouser {{ user.username }} {% if user.access | default("ro") == "rw" %}rwuser{% 
 
 ###############################################################################
 # Extend: expose /etc/passwd usernames via NET-SNMP-EXTEND-MIB
-# (makes user enumeration straightforward in lab exercises)
 ###############################################################################
 extend users /bin/sh -c "cut -d: -f1 /etc/passwd"
 

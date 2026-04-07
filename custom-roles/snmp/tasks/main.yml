@@ -11,6 +11,14 @@
     state: present
   when: ansible_facts['os_family'] == "RedHat"
 
+# ── Validate snmp_oid_view value ─────────────────────────────────────────────
+
+- name: Validate snmp_oid_view value 
+  ansible.builtin.assert: 
+    that: 
+      - snmp_oid_view in ["full", "system", "custom"]
+    fail_msg: "snmp_oid_view must be 'full', 'system', or 'custom' - got '{{ snmp_oid_view }}'"
+
 # ── Configure snmpd.conf ─────────────────────────────────────────────────────
 
 - name: Deploy snmpd.conf
@@ -20,7 +28,6 @@
     owner: root
     group: root
     mode: "0600"
-  notify: restart snmpd
 
 - name: Configure SNMPv3 users (createUser directives in persistent store)
   ansible.builtin.template:
@@ -30,8 +37,6 @@
     group: root
     mode: "0600"
   when: snmp_version == "v3" and snmp_v3_users | length > 0
-  notify: 
-    - restart snmpd
 
 # Add a task to allow SNMP through the firewall?
 
@@ -40,5 +45,5 @@
 - name: Enable and start snmpd
   ansible.builtin.service:
     name: snmpd
-    state: started
+    state: started  
     enabled: true

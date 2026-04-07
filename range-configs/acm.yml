@@ -4,7 +4,7 @@ ludus:
   - vm_name: "{{ range_id }}-test-kali"
     hostname: "kali"
     template: "kali-x64-desktop-template"
-    vlan: 9
+    vlan: 11 # NOTE: change back to 9 when done testing the Windows Responder thing
     ip_last_octet: 7
     ram_gb: 6
     cpus: 4
@@ -20,6 +20,7 @@ ludus:
         - snmp
         - proxychains4
         - hydra
+        - responder
 
   - vm_name: "{{ range_id }}-web-server"
     hostname: "jer-web01"
@@ -52,17 +53,17 @@ ludus:
       ludus_privesc_binary: "base64"
       ludus_privesc_package: "coreutils"
 
-#  - vm_name: "{{ range_id }}-windows-workstation"
-#    hostname: "jer-win-42"
-#    template: "win11-22h2-x64-enterprise-template"
-#    vlan: 11
-#    ip_last_octet: 17
-#    ram_gb: 8
-#    cpus: 4
-#    windows:
-#      office_version: 2019
-#      office_arch: 64bit
-#      
+  - vm_name: "{{ range_id }}-windows-workstation"
+    hostname: "jer-win-42"
+    template: "win11-22h2-x64-enterprise-template"
+    vlan: 11
+    ip_last_octet: 17
+    ram_gb: 8
+    cpus: 4
+    windows:
+      office_version: 2019
+      office_arch: 64bit
+      
   - vm_name: "{{ range_id }}-ot-server"
     hostname: "ot-server"
     template: "debian-12-x64-server-template"
