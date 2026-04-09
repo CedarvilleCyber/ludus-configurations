@@ -4,7 +4,7 @@ ludus:
   - vm_name: "{{ range_id }}-test-kali"
     hostname: "kali"
     template: "kali-x64-desktop-template"
-    vlan: 11 # NOTE: change back to 9 when done testing the Windows Responder thing
+    vlan: 9
     ip_last_octet: 7
     ram_gb: 6
     cpus: 4
@@ -21,6 +21,8 @@ ludus:
         - proxychains4
         - hydra
         - responder
+        - hashcat
+        - evil-winrm
 
   - vm_name: "{{ range_id }}-web-server"
     hostname: "jer-web01"
@@ -39,19 +41,25 @@ ludus:
         - ftp # this is an FTP client, not server
     roles: 
       - web-setup
-      - add-user
+      - ludus_local_users
       - privesc
     role_vars: 
-      web_setup_type: "apache"
-      web_setup_servername: "jerichotraffic.org"
-      web_setup_app_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/acm-site.tar.gz"
-      web_setup_sql_url: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/database_setup.sql"
-      addusr_user: "ewilliams"
-      addusr_pass: "elegant-crab"
-      addusr_sudo: true
-      addusr_gen_ssh_key: true
-      ludus_privesc_binary: "base64"
-      ludus_privesc_package: "coreutils"
+      web_setup: 
+        type: "apache"
+        servername: "jerichotraffic.org"
+        app_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/acm-site.tar.gz"
+        sql_url: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/database_setup.sql"
+      ludus_local_users: 
+        # Google "dictionary vs list syntax in YAML" to see why these are different
+        - login: "ewilliams"
+          password: "elegant-crab"
+          sudo_nopasswd: true
+          gen_ssh_key: true
+        - login: "aturner"
+          password: "arctic-monkeys"
+      privesc: 
+        binary: "base64"
+        package: "coreutils"
 
   - vm_name: "{{ range_id }}-windows-workstation"
     hostname: "jer-win-42"
@@ -67,7 +75,7 @@ ludus:
   - vm_name: "{{ range_id }}-ot-server"
     hostname: "ot-server"
     template: "debian-12-x64-server-template"
-    vlan: 11 # NOTE: change back to 12 if you get the windows workstation working
+    vlan: 12
     ip_last_octet: 43
     ram_gb: 4
     cpus: 2
@@ -84,9 +92,10 @@ ludus:
       - file-transfer
       - snmp
     role_vars: 
-      addusr_user: "mjackson"
-      addusr_pass: "nervous-salmon" # follows an adjective-noun password policy
-      addusr_sudo: true
+      ludus_local_users: 
+        - login: "mjackson"
+        - password: "nervous-salmon" # follows an adjective-noun password policy
+        - sudo_nopasswd: true
       vsftpd_anon_root: /srv/shares/public
       file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/ot-pwd-policy.md"
       file_transfer_dst: "/srv/shares/public/password-policy.md"

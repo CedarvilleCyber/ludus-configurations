@@ -8,16 +8,16 @@
     state: present
   become: true
 
-- name: validate web_setup_type
+- name: validate web_setup.type
   assert: 
     that: 
-      - web_setup_type is defined
-      - web_setup_type in ['apache', 'nodejs']
-    fail_msg: "web_setup_type must be either 'apache' or 'nodejs', got '{{ web_setup_type }}'"
-    success_msg: "web_setup_type is set to '{{ web_setup_type }}'"
+      - web_setup.type is defined
+      - web_setup.type in ['apache', 'nodejs']
+    fail_msg: "web_setup.type must be either 'apache' or 'nodejs', got '{{ web_setup.type }}'"
+    success_msg: "web_setup.type is set to '{{ web_setup.type }}'"
 
 - name: Set up the web app using Apache
-  when: web_setup_type == 'apache'
+  when: web_setup.type == 'apache'
   block: 
     - name: install Apache
       ansible.builtin.include_role: 
@@ -26,7 +26,7 @@
         apache_remove_default_vhost: true 
         apache_create_vhosts: true
         apache_vhosts:       
-          - servername: "{{ web_setup_servername }}" # not working for some reason??
+          - servername: "{{ web_setup.servername }}" # not working for some reason??
             documentroot: "/var/www/html"
             options: "-Indexes +FollowSymLinks" # similarly nonfunctional
 
@@ -52,7 +52,7 @@
 
     - name: download MySQL database file # this is the SQL dump file FOR THIS SPECIFIC SCENARIO
       ansible.builtin.get_url:
-        url: "{{ web_setup_sql_url }}"
+        url: "{{ web_setup.sql_url }}"
         dest: /tmp/db.sql
 
     - name: import records from .sql dump file
@@ -80,7 +80,7 @@
 
     - name: unzip the web app into /var/www/html
       ansible.builtin.unarchive: 
-        src: "{{ web_setup_app_url }}"
+        src: "{{ web_setup.app_url }}"
         dest: /var/www/html
         remote_src: yes
         extra_opts: ["--strip-components=1"]
@@ -94,7 +94,7 @@
         owner: www-data
 
 - name: set up the web app using Node JS
-  when: web_setup_type == 'nodejs'
+  when: web_setup.type == 'nodejs'
   block:
     - name: install Node JS
       ansible.builtin.include_role:
@@ -109,7 +109,7 @@
 
     - name: unzip the web app into the user's home directory
       ansible.builtin.unarchive:
-        src: "{{ web_setup_url }}"
+        src: "{{ web_setup.url }}"
         dest: /opt/nodejs
         remote_src: yes
 

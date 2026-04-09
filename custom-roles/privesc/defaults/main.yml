@@ -3,5 +3,6 @@
 # name conflicts with other roles
 
 # The name of the binary to configure for privilege escalation
-ludus_privesc_binary: ""
-ludus_privesc_package: "{{ ludus_privesc_binary }}"
+privesc:
+  - binary: ""
+  - package: "{{ privesc.binary }}"

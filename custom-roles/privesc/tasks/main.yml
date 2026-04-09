@@ -1,24 +1,24 @@
 ---
 - name: Install the binary's package
   ansible.builtin.package:
-    name: "{{ ludus_privesc_package }}"
+    name: "{{ privesc.package }}"
     state: present
   
-- name: get {{ ludus_privesc_binary }} path
-  ansible.builtin.command: which {{ ludus_privesc_binary }}
+- name: get {{ privesc.binary }} path
+  ansible.builtin.command: which {{ privesc.binary }}
   register: binary_path
   changed_when: false
 
 - name: print binary path
   ansible.builtin.debug: 
-    msg: "{{ ludus_privesc_binary }}'s path is {{ binary_path.stdout }}"
+    msg: "{{ privesc.binary }}'s path is {{ binary_path.stdout }}"
 
 - name: Set SUID bit on binary
   ansible.builtin.file:
     path: "{{ binary_path.stdout }}"
     mode: '4755'
   become: true
-  register: ludus_privesc_suid_result
+  register: privesc_suid_result
 
 - name: Verify SUID bit is set
   ansible.builtin.stat:
@@ -28,6 +28,6 @@
 - name: Display SUID status
   ansible.builtin.debug:
     msg: |
-      Binary: {{ ludus_privesc_binary }}
+      Binary: {{ privesc.binary }}
       Path: {{ binary_path }}
       Mode: {{ binary_stat.stat.mode }}
