@@ -39,7 +39,8 @@ ludus:
         - dnsutils
         - tmux
         - vim
-        - ftp # this is an FTP client, not server
+        - snmp
+        - ftp # this is an ftp client
     roles: 
       - web-setup
       - ludus_local_users
@@ -62,35 +63,35 @@ ludus:
         binary: "base64"
         package: "coreutils"
 
-  - vm_name: "{{ range_id }}-windows-workstation"
-    hostname: "jer-win-42"
-    template: "win11-22h2-x64-enterprise-template"
-    vlan: 11
-    ip_last_octet: 17
-    ram_gb: 8
-    cpus: 4
-    windows:
-      office_version: 2019
-      office_arch: 64bit
-    roles: 
-      - ludus_local_users
-#      - file-transfer
-    role_vars: 
-      ludus_local_users: 
-        - login: "tjoseph"
-          password: "nervous-salmon"
-      ludus_local_groups: 
-        - name: Administrators
-          members: tjoseph
-        - name: Remote Desktop Users
-          members: tjoseph
-#      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/ot-pwd-policy.md"
-#      file_transfer_dst: "/srv/shares/public/password-policy.md" # change the path to work with anon SMB share
+    # Double pivoting would be too difficult for the freshmen. It would be 
+    # frustrating for them, so I removed this machine so they only need to 
+    # pivot once. I left in the code for future use, though. 
+#  - vm_name: "{{ range_id }}-windows-workstation"
+#    hostname: "jer-win-42"
+#    template: "win11-22h2-x64-enterprise-template"
+#    vlan: 11
+#    ip_last_octet: 17
+#    ram_gb: 8
+#    cpus: 4
+#    windows:
+#      office_version: 2019
+#      office_arch: 64bit
+#    roles: 
+#      - ludus_local_users
+#    role_vars: 
+#      ludus_local_users: 
+#        - login: "tjoseph"
+#          password: "nervous-salmon"
+#      ludus_local_groups: 
+#        - name: Administrators
+#          members: tjoseph
+#        - name: Remote Desktop Users
+#          members: tjoseph
       
   - vm_name: "{{ range_id }}-ot-server"
     hostname: "ot-server"
     template: "debian-12-x64-server-template"
-    vlan: 12
+    vlan: 11
     ip_last_octet: 43
     ram_gb: 4
     cpus: 2
@@ -104,11 +105,16 @@ ludus:
     roles: 
       - ludus_local_users
       - snmp
+      - bertvv.vsftpd
+      - file-transfer
     role_vars: 
       ludus_local_users: 
         - login: "mjackson"
           password: "dragon"
           sudo_nopasswd: true
+      vsftpd_anon_root: /srv/shares/public
+      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/ot-pwd-policy.md"
+      file_transfer_dst: "/srv/shares/public/password-policy.md" 
 
 network: 
   inter_vlan_default: REJECT
