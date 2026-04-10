@@ -106,15 +106,16 @@ ludus:
       - ludus_local_users
       - snmp
       - bertvv.vsftpd
-      - file-transfer
+#      - file-transfer
     role_vars: 
       ludus_local_users: 
         - login: "mjackson"
           password: "dragon"
           sudo_nopasswd: true
-      vsftpd_anon_root: /srv/shares/public
-      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/ot-pwd-policy.md"
-      file_transfer_dst: "/srv/shares/public/password-policy.md" 
+# If you want to add a more complex password, uncomment the FTP & password policy stuff. Otherwise, just use RockYou.
+#      vsftpd_anon_root: /srv/shares/public
+#      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/ot-pwd-policy.md"
+#      file_transfer_dst: "/srv/shares/public/password-policy.md" 
 
 network: 
   inter_vlan_default: REJECT

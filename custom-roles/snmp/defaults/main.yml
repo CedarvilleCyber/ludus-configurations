@@ -17,7 +17,6 @@ snmp_agent_address: "udp:161"
 snmp_agent_port: 161
 
 snmp_syscontact: "sysadmin@internal.jerichoinfra.org"
-snmp_syslocation: ""
 snmp_manage_firewall: false
 
 snmp_config_path: "/etc/snmp/snmpd.conf"

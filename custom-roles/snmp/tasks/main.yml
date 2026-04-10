@@ -47,3 +47,13 @@
     name: snmpd
     state: started  
     enabled: true
+
+  # For some reason, the role behaved unpredictably before I added these two tasks
+- name: pause for 5 seconds (makes snmpd behave reliably)
+  ansible.builtin.pause: 
+    seconds: 5
+
+- name: restart snmpd (makes snmpd behave reliably)
+  ansible.builtin.service: 
+    name: snmpd
+    state: restarted
