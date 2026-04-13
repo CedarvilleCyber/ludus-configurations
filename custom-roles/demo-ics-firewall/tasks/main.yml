@@ -1,5 +1,0 @@
----
-- name: configure ICS firewall
-  ansible.builtin.script: firewall.sh
-  become: yes # tells Ansible to do this section as root
-
