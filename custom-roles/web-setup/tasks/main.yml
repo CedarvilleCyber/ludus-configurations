@@ -9,7 +9,7 @@
   become: true
 
 - name: validate web_setup.type
-  assert: 
+  ansible.builtin.assert: 
     that: 
       - web_setup.type is defined
       - web_setup.type in ['apache', 'nodejs']
