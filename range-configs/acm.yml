@@ -42,7 +42,7 @@ ludus:
         - snmp
         - ftp # this is an ftp client
     roles: 
-      - web-setup
+      - web_setup
       - ludus_local_users
       - privesc
     role_vars: 
@@ -78,10 +78,13 @@ ludus:
 #      office_arch: 64bit
 #    roles: 
 #      - ludus_local_users
+#      - file_transfer
 #    role_vars: 
 #      ludus_local_users: 
 #        - login: "tjoseph"
 #          password: "nervous-salmon"
+#      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/ot-pwd-policy.md"
+#      file_transfer_dst: "/srv/shares/public/password-policy.md" 
 #      ludus_local_groups: 
 #        - name: Administrators
 #          members: tjoseph
@@ -100,22 +103,32 @@ ludus:
         - man
         - curl
         - dnsutils
-        - tmux
         - vim
+        - tmux
+        - python3
+        - python3-rich
+        - python3-requests
     roles: 
       - ludus_local_users
       - snmp
-      - bertvv.vsftpd
-#      - file-transfer
+      - file_transfer
+      - update_bash_config
     role_vars: 
       ludus_local_users: 
         - login: "mjackson"
           password: "dragon"
           sudo_nopasswd: true
-# If you want to add a more complex password, uncomment the FTP & password policy stuff. Otherwise, just use RockYou.
-#      vsftpd_anon_root: /srv/shares/public
-#      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/ot-pwd-policy.md"
-#      file_transfer_dst: "/srv/shares/public/password-policy.md" 
+      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/feature/nuclear-tui/control-panels/nuclear-effect/nuclear-tui.py"
+      file_transfer_dst: "/home/mjackson/nuclear-control.py"
+      update_bash_config_user: "mjackson"
+      update_bash_config_file: ".bash_profile"
+      update_bash_config_block: | 
+            if [ -z "$NUCLEAR_CONTROL_OPERATIONAL" ]; then
+                tmux new-session 2>/dev/null
+                tmux rename-window -t 0 "Control" 2>/dev/null
+                tmux send-keys -t "Control" "python3 /home/mjackson/nuclear-control.py" C-m
+                export NUCLEAR_CONTROL_OPERATIONAL=1
+            fi
 
 network: 
   inter_vlan_default: REJECT

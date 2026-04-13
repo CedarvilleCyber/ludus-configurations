@@ -1,7 +1,6 @@
 ---
 
-update_bash_config:
-  file: ".bashrc"
+update_bash_config_file: ".bashrc"
   # The entries below are intentionally left without a default value.
   # user: 
   # block: 
