@@ -123,11 +123,16 @@ ludus:
       update_bash_config_user: "mjackson"
       update_bash_config_file: ".bash_profile"
       update_bash_config_block: | 
-            if [ -z "$NUCLEAR_CONTROL_OPERATIONAL" ]; then
-                tmux new-session 2>/dev/null
-                tmux rename-window -t 0 "Control" 2>/dev/null
-                tmux send-keys -t "Control" "python3 /home/mjackson/nuclear-control.py" C-m
+            # If you're not in a tmux session, spawn a tmux session
+            if [ -z "$TMUX" ]; then
+                tmux new-session 
+            fi
+            
+            # If you ARE in a tmux session but you haven't run the program yet, then run it
+            if [ -n "$TMUX" ] && [ -z "$NUCLEAR_CONTROL_OPERATIONAL" ]; then
                 export NUCLEAR_CONTROL_OPERATIONAL=1
+                tmux rename-window -t 0 "Control" 
+                tmux send-keys -t "Control" "python3 /home/mjackson/nuclear-control.py" C-m
             fi
 
 network: 
