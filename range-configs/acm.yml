@@ -55,7 +55,6 @@ ludus:
         # Google "dictionary vs list syntax in YAML" to see why these are different
         - login: "ewilliams"
           password: "elegant-crab"
-          sudo_nopasswd: true
           gen_ssh_key: true
         - login: "aturner"
           password: "arctic-monkeys"
@@ -117,7 +116,6 @@ ludus:
       ludus_local_users: 
         - login: "mjackson"
           password: "dragon"
-          sudo_nopasswd: true
       file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/feature/nuclear-tui/control-panels/nuclear-effect/nuclear-tui.py"
       file_transfer_dst: "/home/mjackson/nuclear-control.py"
       update_bash_config_user: "mjackson"
