@@ -1,0 +1,22 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: file-transfer
+  author: Major-Q
+  description: Transfer a file or directory between manager host and range vms
+  company: Cedarville Jericho
+  license: GPLv3
+  min_ansible_version: "2.10"
+  platforms:
+    # Modify the platforms here as required
+    # This example includes a lot, see https://github.com/ansible/ansible-lint/blob/main/src/ansiblelint/schemas/meta.json for all possibilities
+    - name: Ubuntu
+      versions: # I just left theses in, not sure the actual version I support yet
+        - bionic
+        - focal
+        - jammy
+          # galaxy_tags:
+          #- tagswithnospaces
+
+      #collections: [] # Add any collections needed here

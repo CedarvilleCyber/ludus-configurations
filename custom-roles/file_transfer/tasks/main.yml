@@ -1,0 +1,49 @@
+---
+
+# Note: if the directory does not yet exist and the user did not specify its intended
+# permissions, Ansible uses the target machine's defaults to set the permissions
+- name: create dest dir and set permissions if user specified them
+  ansible.builtin.file:
+    path: "{{ file_transfer_dst | dirname }}"
+    state: directory
+    mode: "{{ file_transfer_dst_dir_mode | default(omit) }}"
+    owner: "{{ file_transfer_owning_user | default(omit) }}"
+    group: "{{ file_transfer_owning_user | default(omit) }}"
+
+- name: set fact for whether source is a URL
+  ansible.builtin.set_fact: 
+    src_is_url: "{{ file_transfer_src | regex_search('^(https?|ftp)://') is not none }}"
+    # Note: the "is not none" logic above converts from a matched string to a bool value
+
+- name: display source URL info
+  ansible.builtin.debug: 
+    msg: 
+    - "src_is_url: {{ src_is_url }}"
+    - "URL itself: {{ file_transfer_src }}"
+    - "regex result: {{ file_transfer_src | regex_search('^(https?|ftp)://') }}"
+
+- name: copy remote file
+  when: src_is_url
+  block: 
+    - name: install ca-certificates
+      ansible.builtin.package: 
+        name: ca-certificates
+        state: latest
+      become: true
+
+    - name: download file
+      ansible.builtin.get_url: 
+        url: "{{ file_transfer_src }}"
+        dest: "{{ file_transfer_dst }}"
+        owner: "{{ file_transfer_owning_user | default(omit) }}"
+        group: "{{ file_transfer_owning_user | default(omit) }}"
+        mode: "{{ file_transfer_file_mode | default(omit) }}"
+
+- name: copy local file
+  ansible.builtin.copy:
+    src: "{{ file_transfer_src }}"
+    dest: "{{ file_transfer_dst }}"
+    owner: "{{ file_transfer_owning_user | default(omit) }}"
+    group: "{{ file_transfer_owning_user | default(omit) }}"
+    mode: "{{ file_transfer_file_mode | default(omit) }}"
+  when: not src_is_url
