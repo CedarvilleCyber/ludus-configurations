@@ -37,6 +37,7 @@ ludus:
         - man
         - curl
         - dnsutils
+        - ca-certificates
         - tmux
         - vim
         - snmp
@@ -62,34 +63,6 @@ ludus:
         binary: "base64"
         package: "coreutils"
 
-    # Double pivoting would be too difficult for the freshmen. It would be 
-    # frustrating for them, so I removed this machine so they only need to 
-    # pivot once. I left in the code for future use, though. 
-#  - vm_name: "{{ range_id }}-windows-workstation"
-#    hostname: "jer-win-42"
-#    template: "win11-22h2-x64-enterprise-template"
-#    vlan: 11
-#    ip_last_octet: 17
-#    ram_gb: 8
-#    cpus: 4
-#    windows:
-#      office_version: 2019
-#      office_arch: 64bit
-#    roles: 
-#      - ludus_local_users
-#      - file_transfer
-#    role_vars: 
-#      ludus_local_users: 
-#        - login: "tjoseph"
-#          password: "nervous-salmon"
-#      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/ot-pwd-policy.md"
-#      file_transfer_dst: "/srv/shares/public/password-policy.md" 
-#      ludus_local_groups: 
-#        - name: Administrators
-#          members: tjoseph
-#        - name: Remote Desktop Users
-#          members: tjoseph
-      
   - vm_name: "{{ range_id }}-ot-server"
     hostname: "ot-server"
     template: "debian-12-x64-server-template"
@@ -104,6 +77,7 @@ ludus:
         - dnsutils
         - vim
         - tmux
+        - ca-certificates
         - python3
         - python3-rich
         - python3-requests
@@ -116,7 +90,7 @@ ludus:
       ludus_local_users: 
         - login: "mjackson"
           password: "dragon"
-      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/feature/nuclear-tui/control-panels/nuclear-effect/nuclear-tui.py"
+      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/control-panels/nuclear-effect/nuclear-tui.py"
       file_transfer_dst: "/home/mjackson/nuclear-control.py"
       update_bash_config_user: "mjackson"
       update_bash_config_file: ".bash_profile"
@@ -132,6 +106,34 @@ ludus:
                 tmux rename-window -t 0 "Control" 
                 tmux send-keys -t "Control" "python3 /home/mjackson/nuclear-control.py" C-m
             fi
+
+  - vm_name: "{{ range_id }}-windows-workstation"
+    hostname: "jer-win-42"
+    template: "win11-22h2-x64-enterprise-template"
+    vlan: 11
+    ip_last_octet: 17
+    ram_gb: 8
+    cpus: 4
+    windows:
+      gpos: 
+        - anon_share_access
+      office_version: 2019
+      office_arch: 64bit
+    roles: 
+      - ludus_local_users
+#      - file_transfer
+      - responder
+    role_vars: 
+      ludus_local_users: 
+        - login: "tjoseph"
+          password: "nervous-salmon"
+      ludus_local_groups: 
+        - name: Remote Desktop Users
+          members: tjoseph
+#      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/ot-pwd-policy.md"
+#      file_transfer_dst: "/srv/shares/public/password-policy.md" # put this on the SMB server somehow
+      responder_user: "tjoseph"
+      responder_pass: "nervous-salmon"
 
 network: 
   inter_vlan_default: REJECT

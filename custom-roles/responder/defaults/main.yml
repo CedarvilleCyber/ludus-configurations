@@ -1,0 +1,7 @@
+---
+
+# Set these values in your Ludus config
+# responder_user: ""
+# responder_pass: ""
+
+responder_unc: '\\Server01\Files'
