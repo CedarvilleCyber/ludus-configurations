@@ -10,24 +10,33 @@ learning outcomes.
 To accomplish this, we created a variety of training scenarios that utilize 
 Ludus to quickly set up and tear down computer networks. You can learn more about
 the Ludus project at https://ludus.cloud.
-## Deploying a Range
-There should be a deploy-range.sh script that sets the Ludus range config, adds
-the Ansible roles, and deploys the range. This can all be done manually, as well.
 
-If you want to set up the range manually, do these steps in order:
+## Deploying a Range
+To deploy a range, you need to determine which config is associated with that 
+range. Then, read the config to determine which Ansible roles it needs. If an
+Ansible role is custom, it will be located in ludus-configurations/custom-roles/.
+
+For custom roles, read their tasks/main.yml file to determine if they're importing
+or including any roles. If they are, add those imported roles to Ludus as well. 
+
+For each Ansible role used in a config, use the following command to add
+the role to Ludus: 
+```
+ludus ansible role add [role-name]   # for roles available in ansible-galaxy
+ludus ansible role add -d /path/to/custom/role   # for custom roles
+
+Ex: 
+ludus ansible role add bertvv.vsftpd   # adds a widely-used FTP server role
+ludus ansible role add -d custom-roles/web_setup   # adds our web app deployment role
+```
+
+Once all necessary Ansible roles have been added to Ludus, set the config and
+deploy the range like so:  
 ```
 ludus range config set -f [config-file.yml]
-ludus ansible role add -d /path/to/your/role # do this for every Ansible role
 ludus range deploy # builds the range specified by the config.yml
-
-# These next steps use an Ansible playbook to remove default creds from the VMs 
-# in the range. The playbook also creates a user with the following creds:
-# debug:debug-user-4-ansible-sysadmin
-# Note: using these creds to get into a machine in an assigned scenario is 
-# considered academic dishonesty and will be treated as such.
-ludus range inventory > ludus-inventory.yml # do after range finishes building
-ansible-playbook rm-default-creds-playbook.yml -i ludus-inventory.yml
 ```
+
 ## Ansible Roles
 ### Public Ansible Roles
 If a training scenario requires a public Ansible role, you'll get an error like 
@@ -51,10 +60,19 @@ Commands:
 `ludus ansible role add -d ./path/to/role`
 
 To test your changed role, do this:
-`ludus range deploy --limit [vm-name] --only-roles [role-to-test]`
+```
+ludus range deploy --limit [vm-name] --only-roles [role-to-test]
+```
+- This limits the deployment to only the specified machine and specified Ansible role.
+- The other machines stay in the same state they were in after the previous deployment.
+- This drastically speeds up your range deployment, which is handy for testing.
 
-To test the syntax of an Ansible role, you can make a mini Ansible playbook that
-runs the role, then use the built-in Ansible syntax linter. 
+I recommend developing Ansible roles in WSL on your personal laptop. You can
+install VS Code in WSL, which gives you a modern IDE combined with the benefits
+of developing in a Linux environment. 
+
+If you do this, VS Code will give you syntax help for your Ansible roles, which
+is quite handy. 
 ## Ludus Networking
 ### External Default Usage
 In the Networking section of a Ludus range config, there's a setting called 
@@ -75,6 +93,9 @@ ludus range deploy -t network
 - This will leave the VMs intact and fully configured
 - Only the range's networking will be impacted (i.e. redone)
 
+I believe you can also use the "Testing" feature to remove internet access from
+your Ludus range, which would likely be much easier. Check the docs for more information.
+
 To learn more about deploy tags, see the official docs here: 
 https://docs.ludus.cloud/docs/tags
 ## Troubleshooting
@@ -83,8 +104,8 @@ If you encounter trouble deploying a range, use these commands to troubleshoot:
 `ludus range errors --verbose`
 
 When using the verbose flag to view Ludus errors, Ludus prints newlines as the 
-literal "\n" characters instead of printing as a newline. To work around that, 
-do this: 
+literal "\n" characters instead of printing as a newline. That's one of Ludus's
+design choices. To work around that, do this: 
 ```
 ludus range errors --verbose 2>&1 | sed 's/\\n/\n/g' | less
 ```
