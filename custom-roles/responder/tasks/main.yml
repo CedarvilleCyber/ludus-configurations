@@ -1,0 +1,15 @@
+---
+
+  # This task should run every minute indefinitely. 
+- name: create a scheduled task to make the machine vulnerable to Responder.
+  community.windows.win_scheduled_task: 
+    name: load_server
+    description: loads the development file server.
+    actions: 
+      - path: cmd.exe
+        arguments: 'net use "{{ responder_unc }}" /user:{{ responder_user }} {{ responder_pass }}'
+    triggers: 
+      - type: time
+        repetition: 
+        interval: PT1M
+    enabled: true

@@ -1,0 +1,29 @@
+---
+
+- name: validate config filename
+  ansible.builtin.assert:
+    that: update_bash_config_file in ['.bashrc', '.bash_profile']
+    fail_msg: "update_bash_config_file must be '.bashrc' or '.bash_profile', got {{ update_bash_config_file }}"
+    success_msg: "update_bash_config_file is set to {{ update_bash_config_file }}"
+
+- name: set config path variable for root user
+  ansible.builtin.set_fact: 
+    path: " {{ '/root/' ~ update_bash_config_file }} "
+  when: update_bash_config_user == "root"
+
+- name: set config path variable for non-root user
+  ansible.builtin.set_fact: 
+    path: "{{ '/home/' ~ update_bash_config_user ~ '/' ~ update_bash_config_file }}"
+  when: update_bash_config_user != "root"
+
+- name: print absolute path of bash config
+  ansible.builtin.debug: 
+    msg: "The path specified is {{ path }}"
+
+- name: update {{ update_bash_config_user }}'s bash config
+  ansible.builtin.blockinfile:
+    path: "{{ path }}"
+    create: true
+    prepend_newline: true
+    insertafter: EOF
+    block: "{{ update_bash_config_block }}"

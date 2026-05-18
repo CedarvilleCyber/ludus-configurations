@@ -1,0 +1,218 @@
+# yaml-language-server: $schema=https://docs.ludus.cloud/schemas/range-config.json
+
+ludus: 
+  - vm_name: "{{ range_id }}-test-kali"
+    hostname: "kali"
+    template: "kali-x64-desktop-template"
+    vlan: 9
+    ip_last_octet: 7
+    ram_gb: 6
+    cpus: 4
+    linux: 
+      packages: 
+        - curl
+        - dnsutils
+        - tmux
+        - vim
+        - nmap
+        - gobuster
+        - seclists
+        - snmp
+        - proxychains4
+        - hydra
+        - responder
+        - hashcat
+        - evil-winrm
+        - freerdp3-x11
+
+  - vm_name: "{{ range_id }}-web-server"
+    hostname: "jer-web01"
+    template: "debian-12-x64-server-template"
+    vlan: 10
+    ip_last_octet: 139
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - man
+        - curl
+        - dnsutils
+        - ca-certificates
+        - tmux
+        - vim
+        - snmp
+        - ftp # this is an ftp client
+    roles: 
+      - web_setup
+      - ludus_local_users
+      - privesc
+    role_vars: 
+      web_setup: 
+        type: "apache"
+        servername: "jerichotraffic.org"
+        app_url: "https://github.com/CedarvilleCyber/Jericho/raw/refs/heads/main/acm-site.tar.gz"
+        sql_url: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/database_setup.sql"
+      ludus_local_users: 
+        # Google "dictionary vs list syntax in YAML" to see why these are different
+        - login: "ewilliams"
+          password: "elegant-crab"
+          gen_ssh_key: true
+        - login: "aturner"
+          password: "arctic-monkeys"
+      privesc: 
+        binary: "base64"
+        package: "coreutils"
+
+  - vm_name: "{{ range_id }}-ot-server"
+    hostname: "ot-server"
+    template: "debian-12-x64-server-template"
+    vlan: 11
+    ip_last_octet: 43
+    ram_gb: 4
+    cpus: 2
+    linux: 
+      packages: 
+        - man
+        - curl
+        - dnsutils
+        - vim
+        - tmux
+        - ca-certificates
+        - python3
+        - python3-rich
+        - python3-requests
+    roles: 
+      - ludus_local_users
+      - snmp
+      - file_transfer
+      - update_bash_config
+    role_vars: 
+      ludus_local_users: 
+        - login: "mjackson"
+          password: "dragon"
+      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/control-panels/nuclear-effect/nuclear-tui.py"
+      file_transfer_dst: "/home/mjackson/nuclear-control.py"
+      update_bash_config_user: "mjackson"
+      update_bash_config_file: ".bash_profile"
+      update_bash_config_block: | 
+            # If you're not in a tmux session, spawn a tmux session
+            if [ -z "$TMUX" ]; then
+                tmux new-session 
+            fi
+            
+            # If you ARE in a tmux session but you haven't run the program yet, then run it
+            if [ -n "$TMUX" ] && [ -z "$NUCLEAR_CONTROL_OPERATIONAL" ]; then
+                export NUCLEAR_CONTROL_OPERATIONAL=1
+                tmux rename-window -t 0 "Control" 
+                tmux send-keys -t "Control" "python3 /home/mjackson/nuclear-control.py" C-m
+            fi
+
+  - vm_name: "{{ range_id }}-windows-workstation"
+    hostname: "jer-win-42"
+    template: "win11-22h2-x64-enterprise-template"
+    vlan: 11
+    ip_last_octet: 17
+    ram_gb: 8
+    cpus: 4
+    windows:
+      gpos: 
+        - anon_share_access
+      office_version: 2019
+      office_arch: 64bit
+    roles: 
+      - ludus_local_users
+#      - file_transfer
+      - responder
+    role_vars: 
+      ludus_local_users: 
+        - login: "tjoseph"
+          password: "nervous-salmon"
+      ludus_local_groups: 
+        - name: Remote Desktop Users
+          members: tjoseph
+#      file_transfer_src: "https://raw.githubusercontent.com/CedarvilleCyber/Jericho/refs/heads/main/acm/ot-pwd-policy.md"
+#      file_transfer_dst: "/srv/shares/public/password-policy.md" # put this on the SMB server somehow
+      responder_user: "tjoseph"
+      responder_pass: "nervous-salmon"
+
+network: 
+  inter_vlan_default: REJECT
+  rules: 
+    # NOTE: you must have Ludus 2.0.10 or newer to use a comma-separated port list
+  - name: allow public vlan to DMZ vlan on port 22, 80, and 443
+    vlan_src: 9
+    vlan_dst: 10
+    protocol: tcp
+    ports: 22, 80, 443
+    action: ACCEPT
+  - name: allow DMZ vlan to public vlan on port 22, 80, and 443
+    vlan_src: 10
+    vlan_dst: 9
+    protocol: tcp
+    ports: 22, 80, 443
+    action: ACCEPT
+
+  - name: allow DMZ vlan to ping IT vlan
+    vlan_src: 10
+    vlan_dst: 11
+    protocol: icmp
+    ports: all
+    action: ACCEPT
+  - name: allow all TCP traffic from DMZ vlan to IT vlan
+    vlan_src: 10
+    vlan_dst: 11
+    protocol: tcp
+    ports: all
+    action: ACCEPT
+  - name: allow all TCP traffic from IT vlan to DMZ vlan
+    vlan_src: 11
+    vlan_dst: 10
+    protocol: tcp
+    ports: all
+    action: ACCEPT
+
+  - name: allow all UDP traffic from DMZ vlan to IT vlan
+    vlan_src: 10
+    vlan_dst: 11
+    protocol: udp
+    ports: all
+    action: ACCEPT
+  - name: allow all UDP traffic from IT vlan to DMZ vlan
+    vlan_src: 11
+    vlan_dst: 10
+    protocol: udp
+    ports: all
+    action: ACCEPT
+
+  - name: allow IT vlan to ping OT vlan
+    vlan_src: 11
+    vlan_dst: 12
+    protocol: icmp
+    ports: all
+    action: ACCEPT
+  - name: allow all TCP traffic from IT vlan to OT vlan
+    vlan_src: 11
+    vlan_dst: 12
+    protocol: tcp
+    ports: all
+    action: ACCEPT
+  - name: allow all TCP traffic from OT vlan to IT vlan
+    vlan_src: 12
+    vlan_dst: 11
+    protocol: tcp
+    ports: all
+    action: ACCEPT
+
+  - name: allow all UDP traffic from IT vlan to OT vlan
+    vlan_src: 11
+    vlan_dst: 12
+    protocol: udp
+    ports: all
+    action: ACCEPT
+  - name: allow all UDP traffic from OT vlan to IT vlan
+    vlan_src: 12
+    vlan_dst: 11
+    protocol: udp
+    ports: all
+    action: ACCEPT
+

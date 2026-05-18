@@ -1,0 +1,29 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: ludus_privesc
+  author: ludus
+  description: An Ansible Role that configures binaries for privilege escalation in cyber training scenarios
+  company: ludus
+  license: GPLv3
+  min_ansible_version: "2.10"
+  platforms:
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+        - bookworm
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+        - jammy
+        - noble
+  galaxy_tags:
+    - privilege-escalation
+    - suid
+    - cyber-training
+    - ludus
+
+collections: [] # Add any collections needed here

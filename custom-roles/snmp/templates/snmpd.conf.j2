@@ -1,0 +1,41 @@
+# snmpd.conf — managed by Ansible (snmp_agent role)
+# Do not edit manually; changes will be overwritten.
+
+###############################################################################
+# Network binding
+###############################################################################
+agentAddress {{ snmp_agent_address }}
+
+###############################################################################
+# OID view definition
+###############################################################################
+{% if snmp_oid_view == "full" %}
+view   allview   included   .1
+{% elif snmp_oid_view == "system" %}
+view   allview   included   .1.3.6.1.2.1.1
+{% elif snmp_oid_view == "custom" %}
+{% for oid in snmp_custom_oids %}
+view   allview   included   {{ oid }}
+{% endfor %}
+{% endif %}
+
+###############################################################################
+# Access control
+###############################################################################
+{% if snmp_version in ["v1", "v2c"] %}
+# SNMPv1/v2c — community string access
+rocommunity {{ snmp_community_string }} {{ snmp_community_source }} -V allview
+{% endif %}
+
+{% if snmp_version == "v3" %}
+# SNMPv3 — user-based access (credentials defined in persistent store)
+{% for user in snmp_v3_users %}
+rouser {{ user.username }} {% if user.access | default("ro") == "rw" %}rwuser{% else %}noauth{% endif %} .1
+{% endfor %}
+{% endif %}
+
+###############################################################################
+# Extend: expose /etc/passwd usernames via NET-SNMP-EXTEND-MIB
+###############################################################################
+extend users /bin/sh -c "cut -d: -f1 /etc/passwd"
+

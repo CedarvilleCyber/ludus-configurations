@@ -1,0 +1,33 @@
+---
+- name: Install the binary's package
+  ansible.builtin.package:
+    name: "{{ privesc.package }}"
+    state: present
+  
+- name: get {{ privesc.binary }} path
+  ansible.builtin.command: which {{ privesc.binary }}
+  register: binary_path
+  changed_when: false
+
+- name: print binary path
+  ansible.builtin.debug: 
+    msg: "{{ privesc.binary }}'s path is {{ binary_path.stdout }}"
+
+- name: Set SUID bit on binary
+  ansible.builtin.file:
+    path: "{{ binary_path.stdout }}"
+    mode: '4755'
+  become: true
+  register: privesc_suid_result
+
+- name: Verify SUID bit is set
+  ansible.builtin.stat:
+    path: "{{ binary_path.stdout }}"
+  register: binary_stat
+
+- name: Display SUID status
+  ansible.builtin.debug:
+    msg: |
+      Binary: {{ privesc.binary }}
+      Path: {{ binary_path }}
+      Mode: {{ binary_stat.stat.mode }}

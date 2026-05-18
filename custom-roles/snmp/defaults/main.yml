@@ -1,0 +1,22 @@
+---
+# Role variables should all be prefaced with the name of the role to avoid
+# name conflicts with other roles
+# See README.md for detailed documentation
+
+snmp_version: "v2c"
+
+snmp_community_string: "public"
+snmp_community_source: "default"
+
+snmp_v3_users: []
+
+snmp_oid_view: "full"
+# snmp_custom_oids:
+
+snmp_agent_address: "udp:161"
+snmp_agent_port: 161
+
+snmp_manage_firewall: false
+
+snmp_config_path: "/etc/snmp/snmpd.conf"
+snmp_persistent_path: "/var/lib/snmp/snmpd.conf"

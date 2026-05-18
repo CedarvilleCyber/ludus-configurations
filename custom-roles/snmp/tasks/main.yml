@@ -1,0 +1,59 @@
+---
+- name: Install SNMP for a Debian-like distro
+  ansible.builtin.package:
+    name: snmpd
+    state: present
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Install SNMP for a RedHat-like distro
+  ansible.builtin.package:
+    name: net-snmp
+    state: present
+  when: ansible_facts['os_family'] == "RedHat"
+
+# ── Validate snmp_oid_view value ─────────────────────────────────────────────
+
+- name: Validate snmp_oid_view value 
+  ansible.builtin.assert: 
+    that: 
+      - snmp_oid_view in ["full", "system", "custom"]
+    fail_msg: "snmp_oid_view must be 'full', 'system', or 'custom' - got '{{ snmp_oid_view }}'"
+
+# ── Configure snmpd.conf ─────────────────────────────────────────────────────
+
+- name: Deploy snmpd.conf
+  ansible.builtin.template:
+    src: snmpd.conf.j2
+    dest: "{{ snmp_config_path }}"
+    owner: root
+    group: root
+    mode: "0600"
+
+- name: Configure SNMPv3 users (createUser directives in persistent store)
+  ansible.builtin.template:
+    src: snmpd_users.conf.j2
+    dest: "{{ snmp_persistent_path }}"
+    owner: root
+    group: root
+    mode: "0600"
+  when: snmp_version == "v3" and snmp_v3_users | length > 0
+
+# Add a task to allow SNMP through the firewall?
+
+# ── Enable & start ─────────────────────────────────────────────────────────────
+
+- name: Enable and start snmpd
+  ansible.builtin.service:
+    name: snmpd
+    state: started  
+    enabled: true
+
+  # For some reason, the role behaved unpredictably before I added these two tasks
+- name: pause for 5 seconds (makes snmpd behave reliably)
+  ansible.builtin.pause: 
+    seconds: 5
+
+- name: restart snmpd (makes snmpd behave reliably)
+  ansible.builtin.service: 
+    name: snmpd
+    state: restarted
