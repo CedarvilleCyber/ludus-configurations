@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://docs.ludus.cloud/schemas/range-config.json
+
+# BCM range: one shared target machine.
+# The student Kali is NOT defined here - the website clones it from the Kairos
+# template, with its NIC set to this range's bridge + VLAN 10, so the clones
+# share the target's network segment.
+
+ludus:
+  - vm_name: "{{ range_id }}-bcm-target"
+    hostname: "traffic-ctl"
+    template: "debian-12-x64-server-template"
+    vlan: 10
+    ip_last_octet: 40            # target = 10.<range_id>.10.40
+    ram_gb: 2
+    cpus: 2
+    linux:
+      packages:
+        - openssh-server
+        - man
+        - curl
+        - vim
+    roles:
+      - bcm_target              # users, flags, rush_hour.sh
+    role_vars:
+      bcm_target:
+        bcm_login_password: "St4ll_Th3_M0t0rc4d3!"
+        bcm_final_flag: "RUSH{sv3tl0v_st4ll3d_1n_tr4ff1c}"
+
+network:
+  inter_vlan_default: REJECT
+  external_default: ACCEPT       # keep ACCEPT for the first deploy: lets packages
+                                 # install and lets the target reach Master Control (192.0.2.1)
+  # No student->target firewall rule is needed: the students and the target both
+  # sit on VLAN 10, so that traffic is intra-VLAN and allowed by default.

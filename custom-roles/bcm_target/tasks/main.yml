@@ -1,0 +1,61 @@
+---
+- name: Create the login user (students SSH in as this)
+  ansible.builtin.user:
+    name: "{{ bcm_login_user }}"
+    password: "{{ bcm_login_password | password_hash('bcrypt') }}"
+    shell: /bin/bash
+    create_home: true
+
+- name: Create the admin user (reached via su)
+  ansible.builtin.user:
+    name: "{{ bcm_admin_user }}"
+    password: "{{ bcm_admin_password | password_hash('bcrypt') }}"
+    shell: /bin/bash
+    create_home: true
+
+- name: Place the foothold flag in the login user's home
+  ansible.builtin.copy:
+    content: "{{ bcm_foothold_flag }}\n"
+    dest: "/home/{{ bcm_login_user }}/flag.txt"
+    owner: "{{ bcm_login_user }}"
+    group: "{{ bcm_login_user }}"
+    mode: "0644"
+
+- name: Plant the hidden admin-credentials file in the login user's home
+  ansible.builtin.copy:
+    content: "{{ bcm_admin_user }}:{{ bcm_admin_password }}\n"
+    dest: "/home/{{ bcm_login_user }}/{{ bcm_hidden_creds_filename }}"
+    owner: "{{ bcm_login_user }}"
+    group: "{{ bcm_login_user }}"
+    mode: "0644"
+
+- name: Install rush_hour.sh in the admin user's home (NOT executable)
+  ansible.builtin.template:
+    src: rush_hour.sh.j2
+    dest: "/home/{{ bcm_admin_user }}/rush_hour.sh"
+    owner: "{{ bcm_admin_user }}"
+    group: "{{ bcm_admin_user }}"
+    mode: "{{ bcm_script_mode }}"
+
+- name: Resolve the traffic API hostname to Master Control
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: "{{ bcm_master_control_ip }} {{ bcm_traffic_host }}"
+    state: present
+
+- name: Enable SSH password authentication (wins over cloud-init defaults)
+  ansible.builtin.copy:
+    content: "PasswordAuthentication yes\n"
+    dest: /etc/ssh/sshd_config.d/00-bcm.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: restart ssh
+
+# --- Shared-target hardening (this one target is used by every student) ---
+- name: Keep the shared accounts stable - block password changes
+  ansible.builtin.command: "chage -m 99999 {{ item }}"
+  loop:
+    - "{{ bcm_login_user }}"
+    - "{{ bcm_admin_user }}"
+  changed_when: false

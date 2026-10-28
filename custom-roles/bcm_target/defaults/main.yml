@@ -1,0 +1,25 @@
+---
+# --- Accounts -------------------------------------------------------------
+# The user students SSH in as (its password is what lives in pass.txt on the Kali)
+bcm_login_user: "signal_op"
+bcm_login_password: "St4ll_Th3_M0t0rc4d3!"
+
+# The user students reach with `su`
+bcm_admin_user: "admin"
+bcm_admin_password: "0verr1de_Ev3ry_L1ght"
+
+# --- Flags ----------------------------------------------------------------
+bcm_foothold_flag: "RUSH{f00th0ld_0n_th3_gr1d}"     # flag.txt in signal_op's home
+bcm_final_flag: "RUSH{sv3tl0v_st4ll3d_1n_tr4ff1c}"  # revealed by rush_hour.sh
+
+# Hidden "ls -a" file in the login user's home holding the admin creds
+bcm_hidden_creds_filename: ".trafficgrid_admin"
+
+# rush_hour.sh starts non-executable so students must chmod +x it
+bcm_script_mode: "0644"
+
+# --- Traffic effect (reached via Master Control) --------------------------
+# rush_hour.sh POSTs /trigger (fire the effect) then /stop (leave the grid
+# stalled on all-red).
+bcm_traffic_host: "traffic.jericho.local"
+bcm_master_control_ip: "192.0.2.1"

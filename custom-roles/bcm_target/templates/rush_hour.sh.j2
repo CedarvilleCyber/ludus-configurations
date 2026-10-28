@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# rush_hour.sh - triggers the city's rush-hour traffic effect.
+#
+# The traffic grid is reached through Master Control, which proxies
+# {{ bcm_traffic_host }} to the traffic-light API.
+
+# Fire the rush-hour effect, then leave the grid stalled on all-red.
+curl -s -X POST "http://{{ bcm_traffic_host }}/trigger" >/dev/null 2>&1
+sleep 2
+curl -s -X POST "http://{{ bcm_traffic_host }}/stop" >/dev/null 2>&1
+
+echo "Every light on the motorcade route turns red. The convoy stalls."
+echo -n "Flag: "
+echo "{{ bcm_final_flag | b64encode }}" | base64 -d
+echo
+
+# Reset permissions so the next student gets to practice chmod too.
+chmod 644 "$0"
