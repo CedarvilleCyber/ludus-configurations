@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=https://docs.ludus.cloud/schemas/range-config.json
+
+ludus:
+  - vm_name: "{{ range_id }}-PLC"
+    hostname: "{{ range_id }}-PLC"
+    template: PLC-plc-debian12-template
+    vlan: 10
+    ip_last_octet: 1
+    ram_gb: 8
+    cpus: 2
+    linux: true
+    roles:
+      - PLC_master
+    role_vars:
+      app_user: user
+      app_directory: /home/Documents
+      modbus_monitor_command: /usr/bin/python3 /home/Documents/modbus_monitor_linux.py
+      #provisioning_source_ip: "REPLACE_WITH_VERIFIED_SOURCE_IP"
+
+  - vm_name: "{{ range_id }}-HMI"
+    hostname: "{{ range_id }}-HMI"
+    template: PLC-hmi-debian12-template
+    vlan: 10
+    ip_last_octet: 2
+    ram_gb: 6
+    cpus: 2
+    linux: true
+    roles:
+      - PLC_hmi
+    role_vars:
+      app_user: user
+      app_python: /home/user/plc_hmi_ludus/.venv/bin/python3
+      app_directory: /home/user/plc_hmi_ludus
+      
+  - vm_name: "{{ range_id }}-ATK"
+    hostname: "{{ range_id }}-ATK"
+    template: PLC-atk-debian12-template
+    vlan: 10
+    ip_last_octet: 3
+    ram_gb: 6
+    cpus: 2
+    linux: true
