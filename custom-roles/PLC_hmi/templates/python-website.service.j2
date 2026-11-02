@@ -1,0 +1,16 @@
+[Unit]
+Description=Python website on port 8080
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User={{ app_user }}
+WorkingDirectory={{ app_directory }}
+ExecStart={{ app_python }} {{ app_directory }}/app.py
+Environment=PYTHONUNBUFFERED=1
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

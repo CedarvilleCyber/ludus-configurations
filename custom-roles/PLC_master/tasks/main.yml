@@ -1,0 +1,6 @@
+---
+- name: Start necessary applications
+  ansible.builtin.import_tasks: software.yml
+
+#- name: Configure the firewall
+#  ansible.builtin.import_tasks: firewall.yml 
