@@ -37,11 +37,14 @@
     group: "{{ bcm_admin_user }}"
     mode: "{{ bcm_script_mode }}"
 
-- name: Resolve the traffic API hostname to Master Control
+- name: Resolve the traffic and sound API hostnames to Master Control
   ansible.builtin.lineinfile:
     path: /etc/hosts
-    line: "{{ bcm_master_control_ip }} {{ bcm_traffic_host }}"
+    line: "{{ bcm_master_control_ip }} {{ item }}"
     state: present
+  loop:
+    - "{{ bcm_traffic_host }}"
+    - "{{ bcm_sound_host }}"
 
 - name: Enable SSH password authentication (wins over cloud-init defaults)
   ansible.builtin.copy:

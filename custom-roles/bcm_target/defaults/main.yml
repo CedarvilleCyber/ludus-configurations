@@ -23,3 +23,8 @@ bcm_script_mode: "0644"
 # stalled on all-red).
 bcm_traffic_host: "traffic.jericho.local"
 bcm_master_control_ip: "192.0.2.1"
+
+# --- Traffic sound (played via the shared sound service on Master Control) -
+# rush_hour.sh POSTs this file to the sound API so the effect makes noise.
+bcm_sound_host: "sound.jericho.local"
+bcm_sound_file: "traffic5.wav"

@@ -3,10 +3,15 @@
 # rush_hour.sh - triggers the city's rush-hour traffic effect.
 #
 # The traffic grid is reached through Master Control, which proxies
-# {{ bcm_traffic_host }} to the traffic-light API.
+# {{ bcm_traffic_host }} to the traffic-light API and {{ bcm_sound_host }}
+# to the shared sound service.
 
-# Fire the rush-hour effect, then leave the grid stalled on all-red.
+# Fire the rush-hour effect and play the traffic sound, then leave the grid
+# stalled on all-red.
 curl -s -X POST "http://{{ bcm_traffic_host }}/trigger" >/dev/null 2>&1
+curl -s -X POST -H "Content-Type: application/json" \
+     -d '{"sound": "{{ bcm_sound_file }}"}' \
+     "http://{{ bcm_sound_host }}/play" >/dev/null 2>&1
 sleep 2
 curl -s -X POST "http://{{ bcm_traffic_host }}/stop" >/dev/null 2>&1
 
