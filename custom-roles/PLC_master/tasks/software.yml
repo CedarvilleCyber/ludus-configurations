@@ -1,0 +1,67 @@
+---
+- name: Create socat service
+  become: true
+  become_user: root
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/socat-pty.service
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      [Unit]
+      Description=Socat virtual serial port pair
+
+      [Service]
+      Type=simple
+      ExecStart=/usr/bin/socat -d -d pty,raw,echo=0,link=/dev/ttyV0 pty,raw,echo=0,link=/dev/ttyV1,mode=0666
+      Restart=always
+      RestartSec=2
+
+      [Install]
+      WantedBy=multi-user.target
+  register: socat_unit
+
+- name: Enable and start socat service
+  become: true
+  become_user: root
+  ansible.builtin.systemd_service:
+    name: socat-pty.service
+    daemon_reload: true
+    enabled: true
+    state: "{{ 'restarted' if socat_unit.changed else 'started' }}"
+
+- name: Wait for virtual serial ports
+  ansible.builtin.wait_for:
+    path: "{{ item }}"
+    state: present
+    timeout: 15
+  loop:
+    - /dev/ttyV0
+    - /dev/ttyV1
+
+- name: Create desktop autostart directory
+  become: true
+  become_user: root
+  ansible.builtin.file:
+    path: /home/user/.config/autostart
+    state: directory
+    owner: user
+    group: user
+    mode: "0755"
+
+- name: Start Modbus monitor on desktop login
+  become: true
+  become_user: root
+  ansible.builtin.copy:
+    dest: /home/user/.config/autostart/modbus-monitor.desktop
+    owner: user
+    group: user
+    mode: "0644"
+    content: |
+      [Desktop Entry]
+      Type=Application
+      Name=Modbus Monitor
+      Exec=/usr/bin/python3 -u /home/user/Documents/modbus_monitor_linux.py
+      Path=/home/user/Documents
+      Terminal=false
+    
